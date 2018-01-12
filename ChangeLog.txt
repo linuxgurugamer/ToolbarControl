@@ -1,0 +1,32 @@
+1.0.5
+	Adoption by LGG
+	Added Changelog
+	Added Settings page
+		Option to use or not Blizzy toolbar if available
+
+1.0.4
+	Switched to UICore for GUI drawing
+	KAC alarm will be set -10 minutes before plan entry
+	Screen message will apperar after alarm creation
+	Fixed showAsUT config parameter not being read correctly
+	Periapsis is shown on "Encounter" entry type
+	Made doubles formatting a little bit saner
+
+1.0.3
+	Recompile for KSP 1.3.1
+
+1.0.2
+	Recompile for KSP 1.3.0
+
+1.0.1
+	Fixed NRE raised when Tracking Station is level 1, message will appear advicing to to upgrade it.
+	Predict potential crash after entering celestial body atmosphere
+	"Eat Snacks" entry type
+	"Diving Course" entry type
+	Plan entries time may be shown as universal and as countdown
+	Use KSP dateTimeFormatter for date/time formatting
+	KAC integration
+	Updated included UIFramework to 0.2.1
+
+1.0.0
+	Initial release

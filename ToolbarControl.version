@@ -1,0 +1,17 @@
+{
+    "NAME"     : "ToolbarControl",
+    "URL"      : "https://raw.githubusercontent.com/linuxgurugamer/ToolbarControl/master/ToolbarControl.version",
+    "DOWNLOAD" : "https://github.com/linuxgurugamer/releases",
+    "GITHUB" :
+    {
+        "USERNAME" : "linuxgurugamer",
+        "REPOSITORY" : "ToolbarControl"
+    },
+    "VERSION" :
+    {
+        "MAJOR" : 0,
+        "MINOR" : 1,
+        "PATCH" : 0,
+        "BUILD" : 0
+    }
+}
