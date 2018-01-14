@@ -8,13 +8,11 @@ rem VERSIONFILE is the name of the version file, usually the same as GAMEDATA,
 rem    but not always
 
 set H=R:\KSP_1.3.1_dev
-set GAMEDIR=ToolbarControl
+set GAMEDIR=000_Toolbar
 set GAMEDATA="GameData\"
-set VERSIONFILE=%GAMEDIR%.version
+set VERSIONFILE=ToolbarControl.version
 
 copy /Y "%1%2" "%GAMEDATA%\%GAMEDIR%\Plugins"
 copy /Y %VERSIONFILE% %GAMEDATA%\%GAMEDIR%
 
 xcopy /y /s /I %GAMEDATA%\%GAMEDIR% "%H%\GameData\%GAMEDIR%"
-
-pause

@@ -11,8 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ChangeLog.txt = ChangeLog.txt
 		deploy.bat = deploy.bat
 		jenkins.txt = jenkins.txt
-		LICENSE = LICENSE
-		README.md = README.md
+		TC_LICENSE.md = TC_LICENSE.md
+		TC_README.md = TC_README.md
 		ToolbarControl.version = ToolbarControl.version
 	EndProjectSection
 EndProject
