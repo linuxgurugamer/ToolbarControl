@@ -101,13 +101,18 @@ namespace ToolbarControl_NS
         /// <param name="largeToolbarIcon"></param>
         /// <param name="smallToolbarIcon"></param>
         public void AddToAllToolbars(TC_ClickHandler onTrue, TC_ClickHandler onFalse,
-            ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId, string largeToolbarIcon, string smallToolbarIcon, string toolTip = null)
+            ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId, 
+            string largeToolbarIcon, 
+            string smallToolbarIcon, 
+            string toolTip = null)
         {
             AddToAllToolbars(onTrue, onFalse, null, null, null, null,
                 visibleInScenes, nameSpace, toolbarId, largeToolbarIcon, largeToolbarIcon, smallToolbarIcon, smallToolbarIcon, toolTip);
         }
+
         public void AddToAllToolbars(TC_ClickHandler onTrue, TC_ClickHandler onFalse,
-            ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId, string largeToolbarIconActive,
+            ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId,
+            string largeToolbarIconActive,
             string largeToolbarIconInactive,
             string smallToolbarIconActive,
             string smallToolbarIconInactive, string toolTip = null)
@@ -156,7 +161,7 @@ namespace ToolbarControl_NS
             this.StockToolbarIconInactive = largeToolbarIconInactive;
             if (HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)                
                 this.ToolTip = toolTip;
-            Debug.Log("AddToAllToolbars");
+            Log.Info("AddToAllToolbars");
             SetupGameScenes(visibleInScenes);
             StartAfterInit();
         }
@@ -197,8 +202,8 @@ namespace ToolbarControl_NS
         private ApplicationLauncherButton stockButton;
         private IButton blizzyButton;
 
-        private string toolbarIconActive = "";
-        private string toolbarIconInactive = "";
+        //private string toolbarIconActive = "";
+        //private string toolbarIconInactive = "";
 
         public static bool buttonActive = false;
 
@@ -232,13 +237,13 @@ namespace ToolbarControl_NS
 
         private void SetBlizzySettings()
         {
-            Debug.Log("SetBlzzySettings");
+            Log.Info("SetBlzzySettings");
             if (activeToolbarType == ToolBarSelected.stock)
             {
                 RemoveStockButton();
             }
-            this.toolbarIconActive = BlizzyToolbarIconActive;
-            this.toolbarIconInactive = BlizzyToolbarIconInactive;
+            //this.toolbarIconActive = BlizzyToolbarIconActive;
+            //this.toolbarIconInactive = BlizzyToolbarIconInactive;
 
             this.blizzyButton = ToolbarManager.Instance.add(nameSpace, toolbarId);
             this.blizzyButton.ToolTip = ToolTip;
@@ -252,7 +257,7 @@ namespace ToolbarControl_NS
 
         private void SetStockSettings()
         {
-            Debug.Log("SetStockSettings");
+            Log.Info("SetStockSettings");
             if (activeToolbarType == ToolBarSelected.blizzy)
             {
                 RemoveBlizzyButton();
@@ -262,8 +267,8 @@ namespace ToolbarControl_NS
             GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
             OnGUIAppLauncherReady();
 
-            this.toolbarIconActive = StockToolbarIconActive;
-            this.toolbarIconInactive = StockToolbarIconInactive;
+            //this.toolbarIconActive = StockToolbarIconActive;
+            //this.toolbarIconInactive = StockToolbarIconInactive;
 
             activeToolbarType = ToolBarSelected.stock;
             this.UpdateToolbarIcon();
@@ -272,7 +277,7 @@ namespace ToolbarControl_NS
 
         private void StartAfterInit()
         {
-            Debug.Log("StartAfterInit");
+            Log.Info("StartAfterInit");
 
             SetStockSettings();
 
@@ -285,7 +290,7 @@ namespace ToolbarControl_NS
 
         public void OnDestroy()
         {
-            Debug.Log("ToolbarControl OnDestroy");
+            Log.Info("ToolbarControl OnDestroy");
             if (activeToolbarType == ToolBarSelected.stock)
             {
                 GameEvents.onGUIApplicationLauncherReady.Remove(OnGUIAppLauncherReady);
@@ -301,18 +306,21 @@ namespace ToolbarControl_NS
 
         private void UpdateToolbarIcon()
         {
-            Debug.Log("UpdateToolbarIcon, isEnabled: " + isEnabled);
+            Log.Info("UpdateToolbarIcon, isEnabled: " + isEnabled);
             SetIsEnabled(isEnabled);
             if (activeToolbarType == ToolBarSelected.blizzy)
             {
-                this.blizzyButton.TexturePath = buttonActive ? this.toolbarIconActive : this.toolbarIconInactive;
+                this.blizzyButton.TexturePath = buttonActive ? this.BlizzyToolbarIconActive : this.BlizzyToolbarIconInactive;
             }
             else
             {
                 if (stockButton == null)
-                    Debug.Log("stockButton is null");
+                    Log.Info("stockButton is null");
                 else
-                    this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(buttonActive ? this.toolbarIconActive : this.toolbarIconInactive, false));
+                {
+                    Log.Info("buttonActive: " + buttonActive + ",  StockToolbarIconActive: " + StockToolbarIconActive + ", StockToolbarIconInactive: " + StockToolbarIconInactive);
+                    this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
+                }
             }
         }
         private void OnGUIAppLauncherReady()
@@ -326,15 +334,15 @@ namespace ToolbarControl_NS
                     doOnFalse,
                     doOnHover,
                     doOnHoverOut,
-                    doOonEnable,
+                    doOnEnable,
                     doOnDisable,
                     visibleInScenes,
                     (Texture)GameDatabase.Instance.GetTexture(StockToolbarIconActive, false));
                 SetStockSettings();
             }
         }
-        private void doOnTrue() { SetButtonPos(); onTrue(); }
-        private void doOnFalse() { SetButtonPos(); onFalse(); }
+        private void doOnTrue() { SetButtonPos(); if (this.onTrue != null) ToggleButtonActive(); }
+        private void doOnFalse() { SetButtonPos(); if (this.onFalse != null) ToggleButtonActive(); }
         private void doOnHover()
         {
             if (activeToolbarType == ToolBarSelected.stock)
@@ -342,11 +350,11 @@ namespace ToolbarControl_NS
                 drawTooltip = true;
                 starttimeToolTipShown = Time.fixedTime;
             }
-            onHover();
+            if (this.onHover != null) onHover();
         }
-        private void doOnHoverOut() { drawTooltip = false; onHoverOut(); }
-        private void doOonEnable() { onEnable(); }
-        private void doOnDisable() { onDisable(); }
+        private void doOnHoverOut() { drawTooltip = false; if (this.onHoverOut != null) onHoverOut(); }
+        private void doOnEnable() { if (this.onEnable != null) onEnable(); }
+        private void doOnDisable() { if (this.onDisable != null) onDisable(); }
 
         private void button_Click(ClickEvent e)
         {

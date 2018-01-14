@@ -1,5 +1,6 @@
-0.1.0
-	Initial release
+0.1.2
+	Fixed issue with stock toolbar not changing textures
+	Replaced Debug.Log with logging class to reduce log spam
 
 0.1.1
 	Moved mod into the 000_Toolbar directory
@@ -9,6 +10,11 @@
 	Added settings page
 		Show tooltips
 		Stock tooltip timeout
+
+0.1.0
+	Initial release
+
+
 
 TODO
 	Add tooltip options to Blizzy
