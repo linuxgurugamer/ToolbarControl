@@ -23,7 +23,7 @@ rem    but not always
 rem LICENSE is the license file
 rem README is the readme file
 
-set GAMEDIR=000_Toolbar
+set GAMEDIR=001_ToolbarControl
 set GAMEDATA="GameData\"
 set VERSIONFILE=ToolbarControl.version
 set LICENSE=TC_LICENSE.md

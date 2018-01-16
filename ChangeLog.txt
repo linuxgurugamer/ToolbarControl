@@ -1,3 +1,6 @@
+0.1.3.1
+	Moved mod into it's own folder
+	
 0.1.3
 	Fixed nullref during game startup
 
