@@ -79,6 +79,8 @@ namespace ToolbarControl_NS
             isEnabled = b;
             if (activeToolbarType == ToolBarSelected.stock)
             {
+                if (this.stockButton == null)
+                    return;
                 if (b)
                     this.stockButton.Enable();
                 else
@@ -86,6 +88,8 @@ namespace ToolbarControl_NS
             }
             if (activeToolbarType == ToolBarSelected.blizzy)
             {
+                if (blizzyButton == null)
+                    return;
                 this.blizzyButton.Enabled = b;
             }
         }
