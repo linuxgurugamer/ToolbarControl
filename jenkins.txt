@@ -30,7 +30,7 @@
 2:ToolbarControl,ToolbarControl/ToolbarControl.csproj,ToolbarControl.version,GameData/001_ToolbarControl/Plugins
 
 # 3:SOURCEFILE, DESTDIR
-3:ToolbarControl.version,GameData/000_Toolbar
+3:ToolbarControl.version,GameData/001_ToolbarControl
 #3:LICENSE.md,GameData/KerbalHotSeat
 #3:README.md,GameData/KerbalHotSeat
 
