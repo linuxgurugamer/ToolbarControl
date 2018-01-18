@@ -216,9 +216,16 @@ namespace ToolbarControl_NS
 
         public void SetFalse()
         {
-            buttonActive = false;
+            //buttonActive = false;
             if (stockButton != null)
+            {
+                Log.Info("SetFalse");
                 stockButton.SetFalse();
+            }
+            else
+            {
+                ToggleButtonActive();
+            }
             UpdateToolbarIcon();
         }
         private void RemoveStockButton()
@@ -345,8 +352,20 @@ namespace ToolbarControl_NS
                 SetStockSettings();
             }
         }
-        private void doOnTrue() { SetButtonPos(); if (this.onTrue != null) ToggleButtonActive(); }
-        private void doOnFalse() { SetButtonPos(); if (this.onFalse != null) ToggleButtonActive(); }
+        private void doOnTrue()
+        {
+            SetButtonPos();
+            if (this.onTrue != null)
+                SetButtonActive();
+                //ToggleButtonActive();
+        }
+        private void doOnFalse()
+        {
+            SetButtonPos();
+            if (this.onFalse != null)
+                SetButtonInactive();
+                //ToggleButtonActive();
+        }
         private void doOnHover()
         {
             if (activeToolbarType == ToolBarSelected.stock)
@@ -365,17 +384,32 @@ namespace ToolbarControl_NS
             this.ToggleButtonActive();
         }
 
+        void SetButtonActive()
+        {
+            Log.Info("SetButtonActive");
+            buttonActive = true;
+            onTrue();
+            UpdateToolbarIcon();
+        }
+
+        void SetButtonInactive()
+        {
+            Log.Info("SetButtonInactive");
+            buttonActive = false;
+            onFalse();
+            UpdateToolbarIcon();
+        }
         private void ToggleButtonActive()
         {
             buttonActive = !buttonActive;
-            UpdateToolbarIcon();
+           
             if (buttonActive)
             {
-                onTrue();
+                SetButtonActive();
             }
             else
             {
-                onFalse();
+                SetButtonInactive();
             }
         }
         private void OnGUIAppLauncherDestroyed()

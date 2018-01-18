@@ -18,7 +18,7 @@ namespace ToolbarControl_NS
 
         public static LEVEL level = LEVEL.INFO;
 
-        private static readonly String PREFIX = "EngineIgnitor" + ": ";
+        private static readonly String PREFIX = "ToolbarControl" + ": ";
 
         public static LEVEL GetLevel()
         {
