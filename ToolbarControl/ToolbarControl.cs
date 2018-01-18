@@ -304,10 +304,9 @@ namespace ToolbarControl_NS
             Log.Info("ToolbarControl OnDestroy");
             if (activeToolbarType == ToolBarSelected.stock)
             {
+                RemoveStockButton();
                 GameEvents.onGUIApplicationLauncherReady.Remove(OnGUIAppLauncherReady);
                 GameEvents.onGUIApplicationLauncherDestroyed.Remove(OnGUIAppLauncherDestroyed);
-
-                RemoveStockButton();
             }
             else
             {
