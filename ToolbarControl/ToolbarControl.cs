@@ -148,8 +148,27 @@ namespace ToolbarControl_NS
                 visibleInScenes, nameSpace, toolbarId, largeToolbarIcon, largeToolbarIcon, smallToolbarIcon, smallToolbarIcon, toolTip);
         }
 
+        /// <summary>
+        /// AddLeftRightClickCallbacks
+        /// </summary>
+        /// <param name="onLeftClick"></param>
+        /// <param name="onRightClick"></param>
+        public void AddLeftRightClickCallbacks(TC_ClickHandler onLeftClick, TC_ClickHandler onRightClick)
+        {
+            this.onLeftClick = onLeftClick;
+            this.onRightClick = onRightClick;
+            if (stockButton != null)
+            {
+                if (onLeftClick != null)
+                    stockButton.onLeftClick = (Callback)Delegate.Combine(stockButton.onLeftClick, onLeftClick); //combine delegates together
+                if (onRightClick != null)
+                    stockButton.onRightClick = (Callback)Delegate.Combine(stockButton.onRightClick, onRightClick); //combine delegates together
+            }
+        }
+
         public void AddToAllToolbars(TC_ClickHandler onTrue, TC_ClickHandler onFalse, TC_ClickHandler onHover, TC_ClickHandler onHoverOut, TC_ClickHandler onEnable, TC_ClickHandler onDisable,
             ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId, string largeToolbarIconActive, string largeToolbarIconInactive, string smallToolbarIconActive, string smallToolbarIconInactive, string toolTip = null)
+
         {
             this.onTrue = onTrue;
             this.onFalse = onFalse;
@@ -199,6 +218,8 @@ namespace ToolbarControl_NS
 
         event TC_ClickHandler onTrue = null;
         event TC_ClickHandler onFalse = null;
+        event TC_ClickHandler onLeftClick = null;
+        event TC_ClickHandler onRightClick = null;
         event TC_ClickHandler onHover = null;
         event TC_ClickHandler onHoverOut = null;
         event TC_ClickHandler onEnable = null;
@@ -229,6 +250,7 @@ namespace ToolbarControl_NS
             }
             UpdateToolbarIcon();
         }
+
         private void RemoveStockButton()
         {
             if (this.stockButton != null)
@@ -240,6 +262,7 @@ namespace ToolbarControl_NS
                 this.stockButton = null;
             }
         }
+
         private void RemoveBlizzyButton()
         {
             if (this.blizzyButton != null)
@@ -347,9 +370,16 @@ namespace ToolbarControl_NS
                     doOnDisable,
                     visibleInScenes,
                     (Texture)GameDatabase.Instance.GetTexture(StockToolbarIconActive, false));
+
+                if (onLeftClick != null)
+                    stockButton.onLeftClick = (Callback)Delegate.Combine(stockButton.onLeftClick, onLeftClick); //combine delegates together
+                if (onRightClick != null)
+                    stockButton.onRightClick = (Callback)Delegate.Combine(stockButton.onRightClick, onRightClick); //combine delegates together
+
                 SetStockSettings();
             }
         }
+
         private void doOnTrue()
         {
             SetButtonPos();
@@ -357,6 +387,7 @@ namespace ToolbarControl_NS
                 SetButtonActive();
             //ToggleButtonActive();
         }
+
         private void doOnFalse()
         {
             SetButtonPos();
@@ -364,6 +395,7 @@ namespace ToolbarControl_NS
                 SetButtonInactive();
             //ToggleButtonActive();
         }
+
         private void doOnHover()
         {
             if (activeToolbarType == ToolBarSelected.stock)
@@ -373,13 +405,24 @@ namespace ToolbarControl_NS
             }
             if (this.onHover != null) onHover();
         }
+
         private void doOnHoverOut() { drawTooltip = false; if (this.onHoverOut != null) onHoverOut(); }
         private void doOnEnable() { if (this.onEnable != null) onEnable(); }
         private void doOnDisable() { if (this.onDisable != null) onDisable(); }
 
         private void button_Click(ClickEvent e)
         {
-            this.ToggleButtonActive();
+            if (e.MouseButton == 0)
+            {
+                if (onTrue != null)
+                    this.ToggleButtonActive();
+
+                onLeftClick();
+            } 
+            if (e.MouseButton == 1)
+            {
+                onRightClick();
+            }
         }
 
         void SetButtonActive()
@@ -395,6 +438,7 @@ namespace ToolbarControl_NS
             onFalse();
             UpdateToolbarIcon();
         }
+
         private void ToggleButtonActive()
         {
             buttonActive = !buttonActive;
@@ -408,11 +452,13 @@ namespace ToolbarControl_NS
                 SetButtonInactive();
             }
         }
+
         private void OnGUIAppLauncherDestroyed()
         {
             RemoveStockButton();
         }
-     #region tooltip
+
+        #region tooltip
         bool drawTooltip = false;
         float starttimeToolTipShown = 0;
         void OnGUI()

@@ -1,3 +1,7 @@
+0.1.4
+	Added left/right button callbacks
+	Updated documentation
+
 0.1.3.5
 	More fixes re. stock buttons not being deleted
 

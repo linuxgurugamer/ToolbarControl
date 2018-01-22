@@ -85,12 +85,17 @@ public void AddToAllToolbars(TC_ClickHandler onTrue, TC_ClickHandler onFalse, TC
 			string largeToolbarIconActive, string largeToolbarIconInactive, string smallToolbarIconActive, string smallToolbarIconInactive, 
 			string toolTip = "")
 
+If you need to use Left and Right clicks (seperate from the onTrue and onFalse), the following is available.  Not that if you have an onTrue/onFalse specified along with an onLeftClick, 
+both will be called:
+
+public void AddLeftRightClickCallbacks(TC_ClickHandler onLeftClick, TC_ClickHandler onRightClick)
 
 If you have the toolbar selectable in a settings page, you an ensure that any time the user changes the setting
 the toolbar will change immediately by adding the following (example from FlightPlanner):
 
 	private void OnGUI() 
 	{
+		if (toolbarControl != null)
 				toolbarControl.UseBlizzy(HighLogic.CurrentGame.Parameters.CustomParams<FP>().useBlizzy);
 	}
 
