@@ -213,7 +213,9 @@ namespace ToolbarControl_NS
 
         void SetButtonPos()
         {
-            buttonClickedMousePos = Input.mousePosition;
+            Vector2 pos = Input.mousePosition;
+            pos.y = Screen.height - pos.y;
+            buttonClickedMousePos = pos;
         }
 
         event TC_ClickHandler onTrue = null;
@@ -412,6 +414,7 @@ namespace ToolbarControl_NS
 
         private void button_Click(ClickEvent e)
         {
+            SetButtonPos();
             if (e.MouseButton == 0)
             {
                 if (this.onTrue != null)

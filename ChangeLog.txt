@@ -1,3 +1,7 @@
+0.1.4.2
+	Fixed mouse position for Blizzy toolbar
+	Inverted the y value for the mouse position
+
 0.1.4.1
 	Fixed harmless nullrefs which were happening after clicking toolbar button
 	Added checks to all callbacks for nulls
