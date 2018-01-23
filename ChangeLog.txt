@@ -1,3 +1,7 @@
+0.1.4.1
+	Fixed harmless nullrefs which were happening after clicking toolbar button
+	Added checks to all callbacks for nulls
+
 0.1.4
 	Added left/right button callbacks
 	Updated documentation

@@ -414,28 +414,32 @@ namespace ToolbarControl_NS
         {
             if (e.MouseButton == 0)
             {
-                if (onTrue != null)
+                if (this.onTrue != null)
                     this.ToggleButtonActive();
 
-                onLeftClick();
+                if (onLeftClick != null)
+                    onLeftClick();
             } 
             if (e.MouseButton == 1)
             {
-                onRightClick();
+                if (onRightClick != null)
+                    onRightClick();
             }
         }
 
         void SetButtonActive()
         {
             buttonActive = true;
-            onTrue();
+            if (onTrue !=  null)
+                onTrue();
             UpdateToolbarIcon();
         }
 
         void SetButtonInactive()
         {
             buttonActive = false;
-            onFalse();
+            if (onFalse != null)
+                onFalse();
             UpdateToolbarIcon();
         }
 
