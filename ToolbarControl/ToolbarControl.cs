@@ -11,6 +11,7 @@ namespace ToolbarControl_NS
 
     public class ToolbarControl : MonoBehaviour
     {
+        private static List<ToolbarControl> tcList = null;
         private string nameSpace = "";
         private string toolbarId = "";
         private GameScenes[] gameScenes;
@@ -274,7 +275,7 @@ namespace ToolbarControl_NS
             }
         }
 
-
+        #region SetButtonSettings
         private void SetBlizzySettings()
         {
             if (activeToolbarType == ToolBarSelected.stock)
@@ -311,11 +312,16 @@ namespace ToolbarControl_NS
             activeToolbarType = ToolBarSelected.stock;
             this.UpdateToolbarIcon();
         }
-
+#endregion
 
         private void StartAfterInit()
         {
             SetStockSettings();
+
+            if (tcList == null)
+                tcList = new List<ToolbarControl>();
+
+            tcList.Add(this);
 
             // this is needed because of a bug in KSP with event onGUIAppLauncherReady.
             //if (activeToolbarType == ToolBarSelected.stock || !ToolbarManager.ToolbarAvailable)
@@ -326,6 +332,7 @@ namespace ToolbarControl_NS
         bool destroyed = false;
         public void OnDestroy()
         {
+            tcList.Remove(this);
             destroyed = true;
             if (activeToolbarType == ToolBarSelected.stock)
             {
@@ -348,7 +355,7 @@ namespace ToolbarControl_NS
             else
             {
                 if (stockButton == null)
-                    Log.Info("stockButton is null");
+                    Log.Error("stockButton is null");
                 else
                 {
                     this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
@@ -430,6 +437,7 @@ namespace ToolbarControl_NS
             }
         }
 
+        #region ActiveInactive
         void SetButtonActive()
         {
             buttonActive = true;
@@ -459,6 +467,7 @@ namespace ToolbarControl_NS
                 SetButtonInactive();
             }
         }
+#endregion
 
         private void OnGUIAppLauncherDestroyed()
         {
@@ -468,6 +477,10 @@ namespace ToolbarControl_NS
         #region tooltip
         bool drawTooltip = false;
         float starttimeToolTipShown = 0;
+        Vector2 tooltipSize;
+        float tooltipX, tooltipY;
+        Rect tooltipRect;
+
         void OnGUI()
         {
             if (!HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)
@@ -483,9 +496,7 @@ namespace ToolbarControl_NS
             }
         }
 
-        Vector2 tooltipSize;
-        float tooltipX, tooltipY;
-        Rect tooltipRect;
+
         void SetupTooltip()
         {
             if (ToolTip != null && ToolTip.Trim().Length > 0)
@@ -527,5 +538,33 @@ namespace ToolbarControl_NS
             }
         }
         #endregion
+
+        /// <summary>
+        /// Checks whether the given stock button was created by this mod.
+        /// </summary>
+        /// <param name="button">the button to check</param>
+        /// <param name="nameSpace">The namespace of the button</param>
+        /// <param name="id">the unique ID of the button</param>
+        /// <returns>true, if the button was created by the mod, false otherwise</returns>
+        public static bool IsStockButtonManaged(ApplicationLauncherButton button, out string nameSpace, out string id)
+        {
+            nameSpace = "";
+            id = "";
+            if (tcList == null)
+                return false;
+            foreach (var b in tcList)
+            {
+                if (b.activeToolbarType == ToolBarSelected.stock)
+                {
+                    if (b.stockButton == button)
+                    {
+                        nameSpace = b.nameSpace;
+                        id = b.toolbarId;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

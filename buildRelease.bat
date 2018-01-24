@@ -26,8 +26,8 @@ rem README is the readme file
 set GAMEDIR=001_ToolbarControl
 set GAMEDATA="GameData\"
 set VERSIONFILE=ToolbarControl.version
-set LICENSE=TC_LICENSE.md
-set README=TC_README.md
+set LICENSE=LICENSE.md
+set README=README.md
 
 set RELEASEDIR=d:\Users\jbb\release
 set ZIP="c:\Program Files\7-zip\7z.exe"

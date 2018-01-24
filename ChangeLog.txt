@@ -1,3 +1,7 @@
+0.1.4.3
+	Added method/function to allow mods to check to see if a toolbarbutton is controlled by this mod
+	Renamed License.md and README.md
+
 0.1.4.2
 	Fixed mouse position for Blizzy toolbar
 	Inverted the y value for the mouse position
