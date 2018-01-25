@@ -51,7 +51,12 @@ namespace ToolbarControl_NS
         /// <param name="useBlizzy"></param>
         public void UseBlizzy(bool useBlizzy)
         {
-
+            if (activeToolbarType == ToolBarSelected.none)
+            {
+                prestartUseBlizzy = true;
+                return;
+            }
+                
             if (ToolbarManager.ToolbarAvailable && useBlizzy)
             {
                 if (activeToolbarType == ToolBarSelected.stock)
@@ -239,6 +244,7 @@ namespace ToolbarControl_NS
 
         enum ToolBarSelected { stock, blizzy, none };
         ToolBarSelected activeToolbarType = ToolBarSelected.none;
+        bool prestartUseBlizzy = false;
 
         public void SetFalse()
         {
@@ -316,7 +322,10 @@ namespace ToolbarControl_NS
 
         private void StartAfterInit()
         {
-            SetStockSettings();
+            if (prestartUseBlizzy)
+                SetBlizzySettings();
+            else
+                SetStockSettings();
 
             if (tcList == null)
                 tcList = new List<ToolbarControl>();
@@ -565,6 +574,37 @@ namespace ToolbarControl_NS
                 }
             }
             return false;
+        }
+
+        public void SetTrue(bool makeCall = false)
+        {
+            if (activeToolbarType == ToolBarSelected.stock)
+            {
+                stockButton.SetTrue(makeCall);
+            }
+            else
+            {
+                blizzyButton.TexturePath = BlizzyToolbarIconActive;
+              
+                if (onTrue != null && makeCall)
+                    onTrue();
+            }
+            buttonActive = true;
+        }
+
+        public void SetFalse(bool makeCall = false)
+        {
+            if (activeToolbarType == ToolBarSelected.stock)
+            {
+                stockButton.SetFalse(makeCall);
+            }
+            else
+            {
+                blizzyButton.TexturePath = BlizzyToolbarIconInactive;
+                if (onFalse != null && makeCall)
+                    onFalse();
+            }
+            buttonActive = false;
         }
     }
 }

@@ -101,3 +101,9 @@ the toolbar will change immediately by adding the following (example from Flight
 
 You can also add, if you like, various callbacks to monitor the settings.  This is a very lightweight call, if 
 there isn't any change, it returns immediately
+
+If you wish to manually change the button setting, you can use the following methods. If makeCall is true, then the appropriate 
+call will be done, if there is a defined function for it
+
+public void SetTrue(bool makeCall = false)
+public void SetFalse(bool makeCall = false)
