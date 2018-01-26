@@ -53,7 +53,7 @@ namespace ToolbarControl_NS
         {
             if (activeToolbarType == ToolBarSelected.none)
             {
-                prestartUseBlizzy = true;
+                prestartUseBlizzy = useBlizzy;
                 return;
             }
                 
