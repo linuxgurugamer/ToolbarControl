@@ -1,3 +1,6 @@
+0.1.4.6
+	Added code to not try to use tooltips if not in a scene which supports it
+
 0.1.4.5
 	Fixed typo in the UseBlizzy method which was causing the blizzy toolbar to be always selected if it was called before the initial button creation
 

@@ -24,6 +24,7 @@ namespace ToolbarControl_NS
         private ApplicationLauncher.AppScenes visibleInScenes;
         private string toolTip = null;
 
+        //private bool spaceCenterVisited = false;
         /// <summary>
         /// The button's tool tip text. Set to null if no tool tip is desired.
         /// </summary>
@@ -64,7 +65,7 @@ namespace ToolbarControl_NS
             }
             else
             {
-                if (activeToolbarType == ToolBarSelected.blizzy)
+                if (activeToolbarType != ToolBarSelected.stock)
                 {
                     SetStockSettings();
                 }
@@ -190,13 +191,17 @@ namespace ToolbarControl_NS
             this.BlizzyToolbarIconInactive = smallToolbarIconInactive;
             this.StockToolbarIconActive = largeToolbarIconActive;
             this.StockToolbarIconInactive = largeToolbarIconInactive;
-            if (HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)
-                this.ToolTip = toolTip;
-
+            try
+            {
+                if (HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)
+                    this.ToolTip = toolTip;
+            }
+            catch { }
             SetupGameScenes(visibleInScenes);
             StartAfterInit();
         }
 
+        
         void SetupGameScenes(ApplicationLauncher.AppScenes visibleInScenes)
         {
             List<GameScenes> g = new List<GameScenes>();
@@ -284,6 +289,7 @@ namespace ToolbarControl_NS
         #region SetButtonSettings
         private void SetBlizzySettings()
         {
+            Log.Info("SetBlizzySettings, namespace: " + nameSpace);
             if (activeToolbarType == ToolBarSelected.stock)
             {
                 RemoveStockButton();
@@ -322,6 +328,7 @@ namespace ToolbarControl_NS
 
         private void StartAfterInit()
         {
+            Log.Info("StartAfterInit, prestartuseBlizzy: " + prestartUseBlizzy);
             if (prestartUseBlizzy)
                 SetBlizzySettings();
             else
@@ -492,16 +499,22 @@ namespace ToolbarControl_NS
 
         void OnGUI()
         {
-            if (!HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)
-                return;
-            if (drawTooltip && ToolTip != null && ToolTip.Trim().Length > 0)
+            if (HighLogic.LoadedScene == GameScenes.SPACECENTER ||
+                HighLogic.LoadedScene == GameScenes.EDITOR ||
+                HighLogic.LoadedScene == GameScenes.FLIGHT ||
+                HighLogic.LoadedScene == GameScenes.TRACKSTATION)
             {
-                if (Time.fixedTime - starttimeToolTipShown > HighLogic.CurrentGame.Parameters.CustomParams<TC>().hoverTimeout)
+                if (!HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)
                     return;
+                if (drawTooltip && ToolTip != null && ToolTip.Trim().Length > 0)
+                {
+                    if (Time.fixedTime - starttimeToolTipShown > HighLogic.CurrentGame.Parameters.CustomParams<TC>().hoverTimeout)
+                        return;
 
-                Rect brect = new Rect(Input.mousePosition.x, Input.mousePosition.y, 38, 38);
-                SetupTooltip();
-                GUI.Window(12342, tooltipRect, TooltipWindow, "");
+                    Rect brect = new Rect(Input.mousePosition.x, Input.mousePosition.y, 38, 38);
+                    SetupTooltip();
+                    GUI.Window(12342, tooltipRect, TooltipWindow, "");
+                }
             }
         }
 
