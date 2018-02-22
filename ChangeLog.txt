@@ -1,3 +1,7 @@
+0.1.4.7
+	Fixed bug with not being able to have a button on the Blizzy toolbar only in the flight scene and not in the map view
+	Added void SetTexture(string large, string small) to allow mod to change the button textures directly
+
 0.1.4.6
 	Added code to not try to use tooltips if not in a scene which supports it
 

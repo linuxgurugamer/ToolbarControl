@@ -8,13 +8,49 @@ using System.Linq;
 
 namespace ToolbarControl_NS
 {
+    /// <summary>
+	/// Determines visibility of a button in relation to the currently running game scene.
+	/// </summary>
+	/// <example>
+	/// <code>
+	/// IButton button = ...
+	/// button.Visibility = new GameScenesVisibility(GameScenes.EDITOR, GameScenes.FLIGHT);
+	/// </code>
+	/// </example>
+	/// <seealso cref="IButton.Visibility"/>
+	public class TC_GameScenesVisibility : IVisibility
+    {
+        public bool Visible
+        {
+            get
+            {
+                return (HighLogic.LoadedScene == GameScenes.FLIGHT && !MapView.MapIsEnabled && 
+                    (visibleInScenes & ApplicationLauncher.AppScenes.FLIGHT) != ApplicationLauncher.AppScenes.NEVER) ||
+                    (HighLogic.LoadedScene == GameScenes.FLIGHT && MapView.MapIsEnabled && 
+                    (visibleInScenes & ApplicationLauncher.AppScenes.MAPVIEW) != ApplicationLauncher.AppScenes.NEVER) || 
+                    (HighLogic.LoadedScene == GameScenes.SPACECENTER && 
+                    (visibleInScenes & ApplicationLauncher.AppScenes.SPACECENTER) != ApplicationLauncher.AppScenes.NEVER) || 
+                    (HighLogic.LoadedScene == GameScenes.EDITOR && 
+                    (visibleInScenes & (ApplicationLauncher.AppScenes.VAB | ApplicationLauncher.AppScenes.SPH)) != ApplicationLauncher.AppScenes.NEVER) || 
+                    (HighLogic.LoadedScene == GameScenes.TRACKSTATION && (visibleInScenes & ApplicationLauncher.AppScenes.TRACKSTATION) != ApplicationLauncher.AppScenes.NEVER) || 
+                    (HighLogic.LoadedScene == GameScenes.MAINMENU && (visibleInScenes & ApplicationLauncher.AppScenes.MAINMENU) != ApplicationLauncher.AppScenes.NEVER);
+            }
+        }
+
+        ApplicationLauncher.AppScenes visibleInScenes;
+
+        public TC_GameScenesVisibility(ApplicationLauncher.AppScenes visibleInScenes)
+        {
+            this.visibleInScenes = visibleInScenes;
+        }
+    }
 
     public class ToolbarControl : MonoBehaviour
     {
         private static List<ToolbarControl> tcList = null;
         private string nameSpace = "";
         private string toolbarId = "";
-        private GameScenes[] gameScenes;
+       // private GameScenes[] gameScenes;
 
         private string BlizzyToolbarIconActive = "";
         private string BlizzyToolbarIconInactive = "";
@@ -197,11 +233,37 @@ namespace ToolbarControl_NS
                     this.ToolTip = toolTip;
             }
             catch { }
+#if false
             SetupGameScenes(visibleInScenes);
+#endif
             StartAfterInit();
         }
 
-        
+        string lastLarge = "";
+        string lastSmall = "";
+        public void SetTexture(string large, string small)
+        {
+            Log.Info("ToolbarControl.SetTexture, lastLarge: " + lastLarge + ", large: " + large + ", small: " + small);
+            if (ToolbarManager.ToolbarAvailable && activeToolbarType == ToolBarSelected.blizzy)
+            {
+                lastSmall = small;
+                blizzyButton.TexturePath = small;
+            }
+            else
+            {
+                if (lastLarge != large)
+                {
+                    lastLarge = large;
+
+                    Texture2D tex = GameDatabase.Instance.GetTexture(lastLarge, false);
+                    if (tex != null)
+                      stockButton.SetTexture((Texture)tex);                   
+                }
+
+            }
+        }
+
+#if false
         void SetupGameScenes(ApplicationLauncher.AppScenes visibleInScenes)
         {
             List<GameScenes> g = new List<GameScenes>();
@@ -221,6 +283,7 @@ namespace ToolbarControl_NS
                 g.Add(GameScenes.SPACECENTER);
             gameScenes = g.ToArray();
         }
+#endif
 
         void SetButtonPos()
         {
@@ -286,7 +349,7 @@ namespace ToolbarControl_NS
             }
         }
 
-        #region SetButtonSettings
+#region SetButtonSettings
         private void SetBlizzySettings()
         {
             Log.Info("SetBlizzySettings, namespace: " + nameSpace);
@@ -300,7 +363,7 @@ namespace ToolbarControl_NS
             this.blizzyButton = ToolbarManager.Instance.add(nameSpace, toolbarId);
             this.blizzyButton.ToolTip = ToolTip;
             this.blizzyButton.OnClick += this.button_Click;
-            this.blizzyButton.Visibility = new GameScenesVisibility(gameScenes);
+            this.blizzyButton.Visibility = new TC_GameScenesVisibility(visibleInScenes);
 
 
             activeToolbarType = ToolBarSelected.blizzy;
@@ -364,6 +427,11 @@ namespace ToolbarControl_NS
         private void UpdateToolbarIcon()
         {
             SetIsEnabled(isEnabled);
+            if (lastLarge != "")
+            {
+               // SetTexture(lastLarge, lastSmall);
+                return;                    
+            }
             if (activeToolbarType == ToolBarSelected.blizzy)
             {
                 this.blizzyButton.TexturePath = buttonActive ? this.BlizzyToolbarIconActive : this.BlizzyToolbarIconInactive;
@@ -383,8 +451,8 @@ namespace ToolbarControl_NS
             if (destroyed)
                 return;
             // Setup PW Stock Toolbar button
-            bool hidden = false;
-            if (ApplicationLauncher.Ready && (stockButton == null || !ApplicationLauncher.Instance.Contains(stockButton, out hidden)))
+            //bool hidden = false;
+            if (ApplicationLauncher.Ready && (stockButton == null /*|| !ApplicationLauncher.Instance.Contains(stockButton, out hidden) */ ) )
             {
                 stockButton = ApplicationLauncher.Instance.AddModApplication(
                     doOnTrue,
@@ -453,7 +521,7 @@ namespace ToolbarControl_NS
             }
         }
 
-        #region ActiveInactive
+#region ActiveInactive
         void SetButtonActive()
         {
             buttonActive = true;
@@ -490,7 +558,7 @@ namespace ToolbarControl_NS
             RemoveStockButton();
         }
 
-        #region tooltip
+#region tooltip
         bool drawTooltip = false;
         float starttimeToolTipShown = 0;
         Vector2 tooltipSize;
@@ -559,7 +627,7 @@ namespace ToolbarControl_NS
                 GUI.Label(tooltipRect, ToolTip, HighLogic.Skin.label);
             }
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Checks whether the given stock button was created by this mod.
