@@ -243,10 +243,18 @@ namespace ToolbarControl_NS
         string lastSmall = "";
         public void SetTexture(string large, string small)
         {
+            if (large == "" && small == "")
+            {
+                lastLarge = "";
+                lastSmall = "";
+                UpdateToolbarIcon();
+                return;
+            }
+            lastSmall = small;
             Log.Info("ToolbarControl.SetTexture, lastLarge: " + lastLarge + ", large: " + large + ", small: " + small);
             if (ToolbarManager.ToolbarAvailable && activeToolbarType == ToolBarSelected.blizzy)
             {
-                lastSmall = small;
+                lastLarge = large;
                 blizzyButton.TexturePath = small;
             }
             else
@@ -385,7 +393,7 @@ namespace ToolbarControl_NS
             //this.toolbarIconInactive = StockToolbarIconInactive;
 
             activeToolbarType = ToolBarSelected.stock;
-            this.UpdateToolbarIcon();
+            this.UpdateToolbarIcon(true);
         }
 #endregion
 
@@ -424,25 +432,31 @@ namespace ToolbarControl_NS
             }
         }
 
-        private void UpdateToolbarIcon()
+        private void UpdateToolbarIcon(bool firstTime = false)
         {
             SetIsEnabled(isEnabled);
-            if (lastLarge != "")
+           // if (lastLarge != "")
             {
                // SetTexture(lastLarge, lastSmall);
-                return;                    
+                //return;                    
             }
             if (activeToolbarType == ToolBarSelected.blizzy)
             {
-                this.blizzyButton.TexturePath = buttonActive ? this.BlizzyToolbarIconActive : this.BlizzyToolbarIconInactive;
+                if (lastSmall != "")
+                    this.blizzyButton.TexturePath = lastSmall;
+                else
+                    this.blizzyButton.TexturePath = buttonActive ? this.BlizzyToolbarIconActive : this.BlizzyToolbarIconInactive;
             }
             else
             {
-                if (stockButton == null)
-                    Log.Error("stockButton is null");
+                if (stockButton == null &&!firstTime )
+                    Log.Error("stockButton is null, " + ",  namespace: " + nameSpace);
                 else
                 {
-                    this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
+                    if (lastLarge != "")
+                        this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(lastLarge, false));
+                    else
+                        this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
                 }
             }
         }

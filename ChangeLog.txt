@@ -1,3 +1,10 @@
+0.1.5.0
+	Recompiled for 1.4.1
+
+0.1.4.8
+	Fixed issue with manually set textures not showing up when toolbar changed
+	Fixed SetTexture so that by setting both large & small to empty strings, control of the icon will revert to the mod
+
 0.1.4.7
 	Fixed bug with not being able to have a button on the Blizzy toolbar only in the flight scene and not in the map view
 	Added void SetTexture(string large, string small) to allow mod to change the button textures directly
