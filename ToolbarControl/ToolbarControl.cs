@@ -196,17 +196,21 @@ namespace ToolbarControl_NS
         /// </summary>
         /// <param name="onLeftClick"></param>
         /// <param name="onRightClick"></param>
-        public void AddLeftRightClickCallbacks(TC_ClickHandler onLeftClick, TC_ClickHandler onRightClick)
+        public void AddLeftRightClickCallbacks(Callback onLeftClick, Callback onRightClick)
         {
+            Log.Info("AddLeftRightClickCallbacks 1");
             this.onLeftClick = onLeftClick;
+            Log.Info("AddLeftRightClickCallbacks 2");
             this.onRightClick = onRightClick;
+
             if (stockButton != null)
             {
                 if (onLeftClick != null)
-                    stockButton.onLeftClick = (Callback)Delegate.Combine(stockButton.onLeftClick, onLeftClick); //combine delegates together
+                    stockButton.onLeftClick = (Callback)Delegate.Combine(stockButton.onLeftClick, this.onLeftClick); //combine delegates together
                 if (onRightClick != null)
-                    stockButton.onRightClick = (Callback)Delegate.Combine(stockButton.onRightClick, onRightClick); //combine delegates together
+                    stockButton.onRightClick = (Callback)Delegate.Combine(stockButton.onRightClick, this.onRightClick); //combine delegates together
             }
+
         }
 
         public void AddToAllToolbars(TC_ClickHandler onTrue, TC_ClickHandler onFalse, TC_ClickHandler onHover, TC_ClickHandler onHoverOut, TC_ClickHandler onEnable, TC_ClickHandler onDisable,
@@ -302,8 +306,8 @@ namespace ToolbarControl_NS
 
         event TC_ClickHandler onTrue = null;
         event TC_ClickHandler onFalse = null;
-        event TC_ClickHandler onLeftClick = null;
-        event TC_ClickHandler onRightClick = null;
+        event Callback onLeftClick = null;
+        event Callback onRightClick = null;
         event TC_ClickHandler onHover = null;
         event TC_ClickHandler onHoverOut = null;
         event TC_ClickHandler onEnable = null;

@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace ToolbarControl_NS
 {
-    public static class Log
+    internal static class Log
     {
         public enum LEVEL
         {
