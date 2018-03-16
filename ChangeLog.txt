@@ -1,3 +1,7 @@
+0.1.5.1
+	Filled nullref when first called
+	Fixed bug when a mod called SetTrue or SetFalse, the button would be set true/false, but the texture wasn't being changed
+
 0.1.5.0
 	Recompiled for 1.4.1
 

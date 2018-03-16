@@ -453,10 +453,13 @@ namespace ToolbarControl_NS
                     Log.Error("stockButton is null, " + ",  namespace: " + nameSpace);
                 else
                 {
-                    if (lastLarge != "")
-                        this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(lastLarge, false));
-                    else
-                        this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
+                    if (stockButton != null)
+                    {
+                        if (lastLarge != "")
+                            this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(lastLarge, false));
+                        else
+                            this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
+                    }
                 }
             }
         }
@@ -468,6 +471,7 @@ namespace ToolbarControl_NS
             //bool hidden = false;
             if (ApplicationLauncher.Ready && (stockButton == null /*|| !ApplicationLauncher.Instance.Contains(stockButton, out hidden) */ ) )
             {
+                Log.Info("Adding stock button");
                 stockButton = ApplicationLauncher.Instance.AddModApplication(
                     doOnTrue,
                     doOnFalse,
@@ -685,6 +689,8 @@ namespace ToolbarControl_NS
                     onTrue();
             }
             buttonActive = true;
+
+            UpdateToolbarIcon(false);
         }
 
         public void SetFalse(bool makeCall = false)
@@ -700,6 +706,8 @@ namespace ToolbarControl_NS
                     onFalse();
             }
             buttonActive = false;
+
+            UpdateToolbarIcon(false);
         }
     }
 }
