@@ -683,12 +683,18 @@ namespace ToolbarControl_NS
         {
             if (activeToolbarType == ToolBarSelected.stock)
             {
-                stockButton.SetTrue(makeCall);
+                if (stockButton != null)
+                    stockButton.SetTrue(makeCall);
+                else
+                    Log.Error("SetTrue called before stockButton is initialized");
             }
             else
             {
-                blizzyButton.TexturePath = BlizzyToolbarIconActive;
-              
+                if (blizzyButton != null)
+                    blizzyButton.TexturePath = BlizzyToolbarIconActive;
+                else
+                    Log.Error("SetTrue called before blizzyButton is initialized");
+
                 if (onTrue != null && makeCall)
                     onTrue();
             }

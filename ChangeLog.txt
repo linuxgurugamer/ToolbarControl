@@ -1,3 +1,6 @@
+0.1.5.3
+	Fixed nullref when ontrue was called before button was created
+
 0.1.5.2
 	Fixed AddLeftRightClickCallbacks call
 
