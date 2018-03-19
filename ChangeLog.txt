@@ -1,5 +1,8 @@
+0.1.5.4
+	Fix for fuzzy buttons
+
 0.1.5.3
-	Fixed nullref when ontrue was called before button was created
+	Fixed nullref when onTrue was called before button was created
 
 0.1.5.2
 	Fixed AddLeftRightClickCallbacks call

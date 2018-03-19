@@ -24,15 +24,15 @@ namespace ToolbarControl_NS
         {
             get
             {
-                return (HighLogic.LoadedScene == GameScenes.FLIGHT && !MapView.MapIsEnabled && 
+                return (HighLogic.LoadedScene == GameScenes.FLIGHT && !MapView.MapIsEnabled &&
                     (visibleInScenes & ApplicationLauncher.AppScenes.FLIGHT) != ApplicationLauncher.AppScenes.NEVER) ||
-                    (HighLogic.LoadedScene == GameScenes.FLIGHT && MapView.MapIsEnabled && 
-                    (visibleInScenes & ApplicationLauncher.AppScenes.MAPVIEW) != ApplicationLauncher.AppScenes.NEVER) || 
-                    (HighLogic.LoadedScene == GameScenes.SPACECENTER && 
-                    (visibleInScenes & ApplicationLauncher.AppScenes.SPACECENTER) != ApplicationLauncher.AppScenes.NEVER) || 
-                    (HighLogic.LoadedScene == GameScenes.EDITOR && 
-                    (visibleInScenes & (ApplicationLauncher.AppScenes.VAB | ApplicationLauncher.AppScenes.SPH)) != ApplicationLauncher.AppScenes.NEVER) || 
-                    (HighLogic.LoadedScene == GameScenes.TRACKSTATION && (visibleInScenes & ApplicationLauncher.AppScenes.TRACKSTATION) != ApplicationLauncher.AppScenes.NEVER) || 
+                    (HighLogic.LoadedScene == GameScenes.FLIGHT && MapView.MapIsEnabled &&
+                    (visibleInScenes & ApplicationLauncher.AppScenes.MAPVIEW) != ApplicationLauncher.AppScenes.NEVER) ||
+                    (HighLogic.LoadedScene == GameScenes.SPACECENTER &&
+                    (visibleInScenes & ApplicationLauncher.AppScenes.SPACECENTER) != ApplicationLauncher.AppScenes.NEVER) ||
+                    (HighLogic.LoadedScene == GameScenes.EDITOR &&
+                    (visibleInScenes & (ApplicationLauncher.AppScenes.VAB | ApplicationLauncher.AppScenes.SPH)) != ApplicationLauncher.AppScenes.NEVER) ||
+                    (HighLogic.LoadedScene == GameScenes.TRACKSTATION && (visibleInScenes & ApplicationLauncher.AppScenes.TRACKSTATION) != ApplicationLauncher.AppScenes.NEVER) ||
                     (HighLogic.LoadedScene == GameScenes.MAINMENU && (visibleInScenes & ApplicationLauncher.AppScenes.MAINMENU) != ApplicationLauncher.AppScenes.NEVER);
             }
         }
@@ -50,7 +50,7 @@ namespace ToolbarControl_NS
         private static List<ToolbarControl> tcList = null;
         private string nameSpace = "";
         private string toolbarId = "";
-       // private GameScenes[] gameScenes;
+        // private GameScenes[] gameScenes;
 
         private string BlizzyToolbarIconActive = "";
         private string BlizzyToolbarIconInactive = "";
@@ -93,7 +93,7 @@ namespace ToolbarControl_NS
                 prestartUseBlizzy = useBlizzy;
                 return;
             }
-                
+
             if (ToolbarManager.ToolbarAvailable && useBlizzy)
             {
                 if (activeToolbarType == ToolBarSelected.stock)
@@ -267,9 +267,9 @@ namespace ToolbarControl_NS
                 {
                     lastLarge = large;
 
-                    Texture2D tex = GameDatabase.Instance.GetTexture(lastLarge, false);
+                    Texture2D tex = GetTexture(lastLarge, false);
                     if (tex != null)
-                      stockButton.SetTexture((Texture)tex);                   
+                        stockButton.SetTexture((Texture)tex);
                 }
 
             }
@@ -361,7 +361,7 @@ namespace ToolbarControl_NS
             }
         }
 
-#region SetButtonSettings
+        #region SetButtonSettings
         private void SetBlizzySettings()
         {
             Log.Info("SetBlizzySettings, namespace: " + nameSpace);
@@ -399,7 +399,7 @@ namespace ToolbarControl_NS
             activeToolbarType = ToolBarSelected.stock;
             this.UpdateToolbarIcon(true);
         }
-#endregion
+        #endregion
 
         private void StartAfterInit()
         {
@@ -439,9 +439,9 @@ namespace ToolbarControl_NS
         private void UpdateToolbarIcon(bool firstTime = false)
         {
             SetIsEnabled(isEnabled);
-           // if (lastLarge != "")
+            // if (lastLarge != "")
             {
-               // SetTexture(lastLarge, lastSmall);
+                // SetTexture(lastLarge, lastSmall);
                 //return;                    
             }
             if (activeToolbarType == ToolBarSelected.blizzy)
@@ -453,19 +453,86 @@ namespace ToolbarControl_NS
             }
             else
             {
-                if (stockButton == null &&!firstTime )
+                if (stockButton == null && !firstTime)
                     Log.Error("stockButton is null, " + ",  namespace: " + nameSpace);
                 else
                 {
                     if (stockButton != null)
                     {
                         if (lastLarge != "")
-                            this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(lastLarge, false));
+                            this.stockButton.SetTexture((Texture)GetTexture(lastLarge, false));
                         else
-                            this.stockButton.SetTexture((Texture)GameDatabase.Instance.GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
+                            this.stockButton.SetTexture((Texture)GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
                     }
                 }
             }
+        }
+
+        //
+        // The following function was initially copied from @JPLRepo's AmpYear mod, which is covered by the GPL, as is this mod
+        //
+        // This function will attempt to load either a PNG or a JPG from the specified path.  
+        // It first checks to see if the actual file is there, if not, it then looks for either a PNG or a JPG
+        //
+        // easier to specify different cases than to change case to lower.  This will fail on MacOS and Linux
+        // if a suffix has mixed case
+        static string[] imgSuffixes = new string[] { ".png", ".jpg", ".PNG", ".JPG" };
+        public static Boolean LoadImageFromFile(ref Texture2D tex, String fileNamePath)
+        {
+
+            Boolean blnReturn = false;
+            try
+            {
+                string path = fileNamePath;
+                if (!System.IO.File.Exists(fileNamePath))
+                {
+                    // Look for the file with an appended suffix.
+                    for (int i = 0; i < imgSuffixes.Length; i++)
+
+                        if (System.IO.File.Exists(fileNamePath + imgSuffixes[i]))
+                        {
+                            path = fileNamePath + imgSuffixes[i];
+                            break;
+                        }
+                }
+
+                //File Exists check
+                if (System.IO.File.Exists(path))
+                {
+                    try
+                    {
+                        tex.LoadImage(System.IO.File.ReadAllBytes(path));
+                        blnReturn = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Failed to load the texture:" + path);
+                        Log.Error(ex.Message);
+                    }
+                }
+                else
+                {
+                    Log.Error("Cannot find texture to load:" + fileNamePath);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to load (are you missing a file):" + fileNamePath);
+                Log.Error(ex.Message);
+            }
+            return blnReturn;
+        }
+
+        Texture2D GetTexture(string path, bool b)
+        {
+
+            Texture2D tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
+
+            if (LoadImageFromFile(ref tex, KSPUtil.ApplicationRootPath + "GameData/" + path))
+                return tex;
+            return tex;
         }
         private void OnGUIAppLauncherReady()
         {
@@ -473,7 +540,7 @@ namespace ToolbarControl_NS
                 return;
             // Setup PW Stock Toolbar button
             //bool hidden = false;
-            if (ApplicationLauncher.Ready && (stockButton == null /*|| !ApplicationLauncher.Instance.Contains(stockButton, out hidden) */ ) )
+            if (ApplicationLauncher.Ready && (stockButton == null /*|| !ApplicationLauncher.Instance.Contains(stockButton, out hidden) */ ))
             {
                 Log.Info("Adding stock button");
                 stockButton = ApplicationLauncher.Instance.AddModApplication(
@@ -484,7 +551,7 @@ namespace ToolbarControl_NS
                     doOnEnable,
                     doOnDisable,
                     visibleInScenes,
-                    (Texture)GameDatabase.Instance.GetTexture(StockToolbarIconActive, false));
+                    (Texture)GetTexture(StockToolbarIconActive, false));
 
                 if (onLeftClick != null)
                     stockButton.onLeftClick = (Callback)Delegate.Combine(stockButton.onLeftClick, onLeftClick); //combine delegates together
@@ -535,7 +602,7 @@ namespace ToolbarControl_NS
 
                 if (onLeftClick != null)
                     onLeftClick();
-            } 
+            }
             if (e.MouseButton == 1)
             {
                 if (onRightClick != null)
@@ -543,11 +610,11 @@ namespace ToolbarControl_NS
             }
         }
 
-#region ActiveInactive
+        #region ActiveInactive
         void SetButtonActive()
         {
             buttonActive = true;
-            if (onTrue !=  null)
+            if (onTrue != null)
                 onTrue();
             UpdateToolbarIcon();
         }
@@ -573,14 +640,14 @@ namespace ToolbarControl_NS
                 SetButtonInactive();
             }
         }
-#endregion
+        #endregion
 
         private void OnGUIAppLauncherDestroyed()
         {
             RemoveStockButton();
         }
 
-#region tooltip
+        #region tooltip
         bool drawTooltip = false;
         float starttimeToolTipShown = 0;
         Vector2 tooltipSize;
@@ -649,7 +716,7 @@ namespace ToolbarControl_NS
                 GUI.Label(tooltipRect, ToolTip, HighLogic.Skin.label);
             }
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// Checks whether the given stock button was created by this mod.
