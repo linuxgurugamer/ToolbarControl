@@ -1,5 +1,8 @@
+0.1.5.5
+	Added GIF to the possible image formats 
+
 0.1.5.4
-	Fix for fuzzy buttons
+	Fix for fuzzy buttons, looks for png and jpg files
 
 0.1.5.3
 	Fixed nullref when onTrue was called before button was created
