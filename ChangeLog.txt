@@ -1,3 +1,6 @@
+0.1.5.7
+	fixed the LoadImageFromFile, the "public" was deleted somehow
+	
 0.1.5.6
 	Added DDS to the possible image formats, only DXT1 and DXT5 are supported
 

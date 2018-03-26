@@ -478,7 +478,7 @@ namespace ToolbarControl_NS
         // easier to specify different cases than to change case to lower.  This will fail on MacOS and Linux
         // if a suffix has mixed case
         static string[] imgSuffixes = new string[] { ".png", ".jpg", ".gif", ".PNG", ".JPG", ".GIF", ".dds", ".DDS" };
-        static Boolean LoadImageFromFile(ref Texture2D tex, String fileNamePath)
+        public static Boolean LoadImageFromFile(ref Texture2D tex, String fileNamePath)
         {
 
             Boolean blnReturn = false;
