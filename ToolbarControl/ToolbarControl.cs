@@ -611,6 +611,10 @@ namespace ToolbarControl_NS
                     stockButton.onRightClick = (Callback)Delegate.Combine(stockButton.onRightClick, onRightClick); //combine delegates together
 
                 SetStockSettings();
+                if (doSetTrue)
+                    SetTrue(doSetTrueValue);
+                if (doSetFalse)
+                    SetFalse(doSetFalseValue);
             }
         }
 
@@ -800,6 +804,19 @@ namespace ToolbarControl_NS
 
         public void SetTrue(bool makeCall = false)
         {
+            if (stockButton == null && activeToolbarType == ToolBarSelected.stock)
+            {
+                doSetTrue = true;
+                doSetTrueValue = makeCall;
+                return;
+            }
+            if (blizzyButton == null && activeToolbarType == ToolBarSelected.blizzy)
+            {
+                doSetTrue = true;
+                doSetTrueValue = makeCall;
+                return;
+            }
+            doSetTrue = false;
             if (activeToolbarType == ToolBarSelected.stock)
             {
                 if (stockButton != null)
@@ -822,8 +839,25 @@ namespace ToolbarControl_NS
             UpdateToolbarIcon(false);
         }
 
+        bool doSetFalse = false, doSetFalseValue = false;
+        bool doSetTrue = false, doSetTrueValue = false;
+
         public void SetFalse(bool makeCall = false)
         {
+            Log.Info("SetFalse");
+            if (stockButton == null && activeToolbarType == ToolBarSelected.stock)
+            {
+                doSetFalse = true;
+                doSetFalseValue = makeCall;
+                return;
+            }
+            if (blizzyButton == null && activeToolbarType == ToolBarSelected.blizzy)
+            {
+                doSetFalse = true;
+                doSetFalseValue = makeCall;
+                return;
+            }
+            doSetFalse = false;
             if (activeToolbarType == ToolBarSelected.stock)
             {
                 stockButton.SetFalse(makeCall);

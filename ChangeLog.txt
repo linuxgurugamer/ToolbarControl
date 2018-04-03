@@ -1,3 +1,9 @@
+0.1.5.9
+	Fixed issue when doing a SetTrue or SetFalse before the button has actually been created
+
+0.1.5.8
+	Updated version file for 1.4.1-1.4.99
+
 0.1.5.7
 	fixed the LoadImageFromFile, the "public" was deleted somehow
 	
