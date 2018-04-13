@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
-using KSP.IO;
 using KSP.UI.Screens;
-using System.Linq;
 using DDSHeaders;
 
 namespace ToolbarControl_NS
@@ -27,12 +24,16 @@ namespace ToolbarControl_NS
             {
                 return (HighLogic.LoadedScene == GameScenes.FLIGHT && !MapView.MapIsEnabled &&
                     (visibleInScenes & ApplicationLauncher.AppScenes.FLIGHT) != ApplicationLauncher.AppScenes.NEVER) ||
+
                     (HighLogic.LoadedScene == GameScenes.FLIGHT && MapView.MapIsEnabled &&
                     (visibleInScenes & ApplicationLauncher.AppScenes.MAPVIEW) != ApplicationLauncher.AppScenes.NEVER) ||
+
                     (HighLogic.LoadedScene == GameScenes.SPACECENTER &&
                     (visibleInScenes & ApplicationLauncher.AppScenes.SPACECENTER) != ApplicationLauncher.AppScenes.NEVER) ||
+
                     (HighLogic.LoadedScene == GameScenes.EDITOR &&
                     (visibleInScenes & (ApplicationLauncher.AppScenes.VAB | ApplicationLauncher.AppScenes.SPH)) != ApplicationLauncher.AppScenes.NEVER) ||
+
                     (HighLogic.LoadedScene == GameScenes.TRACKSTATION && (visibleInScenes & ApplicationLauncher.AppScenes.TRACKSTATION) != ApplicationLauncher.AppScenes.NEVER) ||
                     (HighLogic.LoadedScene == GameScenes.MAINMENU && (visibleInScenes & ApplicationLauncher.AppScenes.MAINMENU) != ApplicationLauncher.AppScenes.NEVER);
             }
@@ -46,7 +47,7 @@ namespace ToolbarControl_NS
         }
     }
 
-    public class ToolbarControl : MonoBehaviour
+    public partial class ToolbarControl : MonoBehaviour
     {
         private static List<ToolbarControl> tcList = null;
         private string nameSpace = "";
@@ -89,24 +90,73 @@ namespace ToolbarControl_NS
         /// <param name="useBlizzy"></param>
         public void UseBlizzy(bool useBlizzy)
         {
-            if (activeToolbarType == ToolBarSelected.none)
-            {
-                prestartUseBlizzy = useBlizzy;
-                return;
-            }
 
             if (ToolbarManager.ToolbarAvailable && useBlizzy)
             {
-                if (activeToolbarType == ToolBarSelected.stock)
+                if (!blizzyActive)
+                {
+                    blizzyActive = true;
+                    stockActive = false;
                     SetBlizzySettings();
+                }
             }
             else
             {
-                if (activeToolbarType != ToolBarSelected.stock)
+                if (!stockActive)
                 {
+                    stockActive = true;
+                    blizzyActive = false;
                     SetStockSettings();
                 }
             }
+        }
+
+        /// <summary>
+        /// Sets flag to use either use or not use the Blizzy toolbar
+        /// </summary>
+        /// <param name="useStock"></param>
+        public void UseStock(bool useStock)
+        {
+
+            if (useStock)
+            {
+                if (!stockActive)
+                {
+                    stockActive = true;
+                    blizzyActive = false;
+                    SetStockSettings();
+                }
+            }
+            else
+            {
+               if (!blizzyActive)
+                {
+                    blizzyActive = true;
+                    stockActive = false;
+                    SetBlizzySettings();
+                }
+            }
+        }
+
+        public void UseButtons(string NameSpace)
+        {
+
+            bool s = registeredMods[NameSpace].modToolbarControl.stockActive;
+            bool b = registeredMods[NameSpace].modToolbarControl.blizzyActive;
+
+            registeredMods[NameSpace].modToolbarControl.stockActive = registeredMods[NameSpace].useStock;
+            registeredMods[NameSpace].modToolbarControl.blizzyActive = true;
+
+
+            if (registeredMods[NameSpace].modToolbarControl.stockActive != s)
+                registeredMods[NameSpace].modToolbarControl.SetStockSettings();     
+
+            registeredMods[NameSpace].modToolbarControl.blizzyActive = registeredMods[NameSpace].useBlizzy;     
+
+            if (registeredMods[NameSpace].modToolbarControl.blizzyActive != b)
+                registeredMods[NameSpace].modToolbarControl.SetBlizzySettings();
+         
+            registeredMods[NameSpace].modToolbarControl.UpdateToolbarIcon();
         }
 
         /// <summary>
@@ -123,7 +173,7 @@ namespace ToolbarControl_NS
         private void SetIsEnabled(bool b)
         {
             isEnabled = b;
-            if (activeToolbarType == ToolBarSelected.stock)
+            if (stockActive)
             {
                 if (this.stockButton == null)
                     return;
@@ -132,7 +182,7 @@ namespace ToolbarControl_NS
                 else
                     this.stockButton.Disable();
             }
-            if (activeToolbarType == ToolBarSelected.blizzy)
+            if (blizzyActive)
             {
                 if (blizzyButton == null)
                     return;
@@ -199,9 +249,7 @@ namespace ToolbarControl_NS
         /// <param name="onRightClick"></param>
         public void AddLeftRightClickCallbacks(Callback onLeftClick, Callback onRightClick)
         {
-            Log.Info("AddLeftRightClickCallbacks 1");
             this.onLeftClick = onLeftClick;
-            Log.Info("AddLeftRightClickCallbacks 2");
             this.onRightClick = onRightClick;
 
             if (stockButton != null)
@@ -238,10 +286,13 @@ namespace ToolbarControl_NS
                     this.ToolTip = toolTip;
             }
             catch { }
-#if false
-            SetupGameScenes(visibleInScenes);
-#endif
+
             StartAfterInit();
+            if (registeredMods.ContainsKey(nameSpace))
+            {
+                registeredMods[nameSpace].modToolbarControl = this;
+                UseButtons(nameSpace);
+            }
         }
 
         string lastLarge = "";
@@ -256,8 +307,7 @@ namespace ToolbarControl_NS
                 return;
             }
             lastSmall = small;
-            Log.Info("ToolbarControl.SetTexture, lastLarge: " + lastLarge + ", large: " + large + ", small: " + small);
-            if (ToolbarManager.ToolbarAvailable && activeToolbarType == ToolBarSelected.blizzy)
+            if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
                 lastLarge = large;
                 blizzyButton.TexturePath = small;
@@ -318,18 +368,13 @@ namespace ToolbarControl_NS
         private ApplicationLauncherButton stockButton;
         private IButton blizzyButton;
 
-        //private string toolbarIconActive = "";
-        //private string toolbarIconInactive = "";
+        public bool buttonActive = false;
 
-        public static bool buttonActive = false;
-
-        enum ToolBarSelected { stock, blizzy, none };
-        ToolBarSelected activeToolbarType = ToolBarSelected.none;
-        bool prestartUseBlizzy = false;
+        bool stockActive = false;
+        bool blizzyActive = false;
 
         public void SetFalse()
         {
-            //buttonActive = false;
             if (stockButton != null)
             {
                 stockButton.SetFalse();
@@ -365,73 +410,67 @@ namespace ToolbarControl_NS
         #region SetButtonSettings
         private void SetBlizzySettings()
         {
-            Log.Info("SetBlizzySettings, namespace: " + nameSpace);
-            if (activeToolbarType == ToolBarSelected.stock)
+            if (!this.stockActive)
             {
-                RemoveStockButton();
+                this.RemoveStockButton();
             }
-            //this.toolbarIconActive = BlizzyToolbarIconActive;
-            //this.toolbarIconInactive = BlizzyToolbarIconInactive;
 
-            this.blizzyButton = ToolbarManager.Instance.add(nameSpace, toolbarId);
-            this.blizzyButton.ToolTip = ToolTip;
-            this.blizzyButton.OnClick += this.button_Click;
-            this.blizzyButton.Visibility = new TC_GameScenesVisibility(visibleInScenes);
-
-
-            activeToolbarType = ToolBarSelected.blizzy;
+            if (this.blizzyButton == null && this.blizzyActive)
+            {
+                this.blizzyButton = ToolbarManager.Instance.add(nameSpace, toolbarId);
+                this.blizzyButton.ToolTip = ToolTip;
+                this.blizzyButton.OnClick += this.button_Click;
+                this.blizzyButton.Visibility = new TC_GameScenesVisibility(visibleInScenes);
+            }
+            if (!this.blizzyActive)
+            {
+                this.RemoveBlizzyButton();
+            }
             this.UpdateToolbarIcon();
         }
 
         private void SetStockSettings()
         {
-            if (activeToolbarType == ToolBarSelected.blizzy)
+            if (!this.blizzyActive)
             {
-                RemoveBlizzyButton();
+                this.RemoveBlizzyButton();
             }
-            // Blizzy toolbar not available, or Stock Toolbar selected Let's go stock :(
-            GameEvents.onGUIApplicationLauncherReady.Add(OnGUIAppLauncherReady);
-            GameEvents.onGUIApplicationLauncherDestroyed.Add(OnGUIAppLauncherDestroyed);
-            OnGUIAppLauncherReady();
-
-            //this.toolbarIconActive = StockToolbarIconActive;
-            //this.toolbarIconInactive = StockToolbarIconInactive;
-
-            activeToolbarType = ToolBarSelected.stock;
+            if (this.stockButton == null && this.stockActive)
+            {
+                // Blizzy toolbar not available, or Stock Toolbar selected Let's go stock :(
+                GameEvents.onGUIApplicationLauncherReady.Add(this.OnGUIAppLauncherReady);
+                GameEvents.onGUIApplicationLauncherDestroyed.Add(this.OnGUIAppLauncherDestroyed);
+                this.OnGUIAppLauncherReady();
+            }
+            if (!this.stockActive)
+            {
+                this.RemoveStockButton();
+            }
             this.UpdateToolbarIcon(true);
         }
         #endregion
 
         private void StartAfterInit()
         {
-            Log.Info("StartAfterInit, prestartuseBlizzy: " + prestartUseBlizzy);
-            if (prestartUseBlizzy)
-                SetBlizzySettings();
-            else
-                SetStockSettings();
-
             if (tcList == null)
                 tcList = new List<ToolbarControl>();
 
             tcList.Add(this);
-
-            // this is needed because of a bug in KSP with event onGUIAppLauncherReady.
-            //if (activeToolbarType == ToolBarSelected.stock || !ToolbarManager.ToolbarAvailable)
-            {
-                //OnGUIAppLauncherReady();
-            }
         }
+
         bool destroyed = false;
         public void OnDestroy()
         {
             tcList.Remove(this);
             destroyed = true;
-            if (activeToolbarType == ToolBarSelected.stock)
+
+            if (stockActive)
             {
                 RemoveStockButton();
 
             }
-            else
+
+            if (blizzyActive)
             {
                 RemoveBlizzyButton();
             }
@@ -440,30 +479,35 @@ namespace ToolbarControl_NS
         private void UpdateToolbarIcon(bool firstTime = false)
         {
             SetIsEnabled(isEnabled);
-            // if (lastLarge != "")
+
+            if (this.blizzyActive && this.blizzyButton != null)
             {
-                // SetTexture(lastLarge, lastSmall);
-                //return;                    
-            }
-            if (activeToolbarType == ToolBarSelected.blizzy)
-            {
-                if (lastSmall != "")
+                if (this.lastSmall != "")
                     this.blizzyButton.TexturePath = lastSmall;
                 else
-                    this.blizzyButton.TexturePath = buttonActive ? this.BlizzyToolbarIconActive : this.BlizzyToolbarIconInactive;
+                    this.blizzyButton.TexturePath = this.buttonActive ? this.BlizzyToolbarIconActive : this.BlizzyToolbarIconInactive;
             }
-            else
+            //else
+            if (this.stockActive)
             {
-                if (stockButton == null && !firstTime)
-                    Log.Error("stockButton is null, " + ",  namespace: " + nameSpace);
+                if (this.stockButton == null && !firstTime)
+                    Log.Error("stockButton is null, " + ",  namespace: " + this.nameSpace);
                 else
                 {
-                    if (stockButton != null)
+                    if (this.stockButton != null)
                     {
-                        if (lastLarge != "")
-                            this.stockButton.SetTexture((Texture)GetTexture(lastLarge, false));
+                        if (this.lastLarge != "")
+                        {
+                            var tex = (Texture)GetTexture(this.lastLarge, false);
+                            if (tex != null)
+                            this.stockButton.SetTexture(tex);
+                        }
                         else
-                            this.stockButton.SetTexture((Texture)GetTexture(buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false));
+                        {
+                            var tex = (Texture)GetTexture(this.buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false);
+                            if (tex != null)
+                                this.stockButton.SetTexture(tex);
+                        }
                     }
                 }
             }
@@ -506,6 +550,7 @@ namespace ToolbarControl_NS
                     {
                         if (dds)
                         {
+                            Log.Info("LoadIimageFromFile, dds");
                             byte[] bytes = System.IO.File.ReadAllBytes(path);
 
 
@@ -531,7 +576,9 @@ namespace ToolbarControl_NS
                             tex = LoadTextureDXT(bytes, tf);
                         }
                         else
+                        {
                             tex.LoadImage(System.IO.File.ReadAllBytes(path));
+                        }
                         blnReturn = true;
                     }
                     catch (Exception ex)
@@ -591,10 +638,8 @@ namespace ToolbarControl_NS
             if (destroyed)
                 return;
             // Setup PW Stock Toolbar button
-            //bool hidden = false;
-            if (ApplicationLauncher.Ready && (stockButton == null /*|| !ApplicationLauncher.Instance.Contains(stockButton, out hidden) */ ))
+            if (ApplicationLauncher.Ready && stockButton == null)
             {
-                Log.Info("Adding stock button");
                 stockButton = ApplicationLauncher.Instance.AddModApplication(
                     doOnTrue,
                     doOnFalse,
@@ -623,7 +668,6 @@ namespace ToolbarControl_NS
             SetButtonPos();
             if (this.onTrue != null)
                 SetButtonActive();
-            //ToggleButtonActive();
         }
 
         private void doOnFalse()
@@ -631,12 +675,11 @@ namespace ToolbarControl_NS
             SetButtonPos();
             if (this.onFalse != null)
                 SetButtonInactive();
-            //ToggleButtonActive();
         }
 
         private void doOnHover()
         {
-            if (activeToolbarType == ToolBarSelected.stock)
+            if (stockActive)
             {
                 drawTooltip = true;
                 starttimeToolTipShown = Time.fixedTime;
@@ -666,10 +709,10 @@ namespace ToolbarControl_NS
             }
         }
 
-        #region ActiveInactive
+#region ActiveInactive
         void SetButtonActive()
         {
-            buttonActive = true;
+            this.buttonActive = true;
             if (onTrue != null)
                 onTrue();
             UpdateToolbarIcon();
@@ -677,7 +720,7 @@ namespace ToolbarControl_NS
 
         void SetButtonInactive()
         {
-            buttonActive = false;
+            this.buttonActive = false;
             if (onFalse != null)
                 onFalse();
             UpdateToolbarIcon();
@@ -685,9 +728,9 @@ namespace ToolbarControl_NS
 
         private void ToggleButtonActive()
         {
-            buttonActive = !buttonActive;
+            this.buttonActive = !this.buttonActive;
 
-            if (buttonActive)
+            if (this.buttonActive)
             {
                 SetButtonActive();
             }
@@ -696,14 +739,14 @@ namespace ToolbarControl_NS
                 SetButtonInactive();
             }
         }
-        #endregion
+#endregion
 
         private void OnGUIAppLauncherDestroyed()
         {
             RemoveStockButton();
         }
 
-        #region tooltip
+#region tooltip
         bool drawTooltip = false;
         float starttimeToolTipShown = 0;
         Vector2 tooltipSize;
@@ -772,7 +815,7 @@ namespace ToolbarControl_NS
                 GUI.Label(tooltipRect, ToolTip, HighLogic.Skin.label);
             }
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Checks whether the given stock button was created by this mod.
@@ -789,7 +832,7 @@ namespace ToolbarControl_NS
                 return false;
             foreach (var b in tcList)
             {
-                if (b.activeToolbarType == ToolBarSelected.stock)
+                if (b.stockActive)
                 {
                     if (b.stockButton == button)
                     {
@@ -804,27 +847,34 @@ namespace ToolbarControl_NS
 
         public void SetTrue(bool makeCall = false)
         {
-            if (stockButton == null && activeToolbarType == ToolBarSelected.stock)
-            {
-                doSetTrue = true;
-                doSetTrueValue = makeCall;
-                return;
-            }
-            if (blizzyButton == null && activeToolbarType == ToolBarSelected.blizzy)
-            {
-                doSetTrue = true;
-                doSetTrueValue = makeCall;
-                return;
-            }
             doSetTrue = false;
-            if (activeToolbarType == ToolBarSelected.stock)
+
+            if (stockButton == null && stockActive)
+            {
+                doSetTrue = true;
+                doSetTrueValue = makeCall;
+            }
+            if (blizzyButton == null && blizzyActive) 
+            {
+                doSetTrue = true;
+                doSetTrueValue = makeCall;
+            }
+            if (stockButton == null && blizzyButton == null)
+                return;
+            doSetTrue = false;
+
+            if (stockActive)
             {
                 if (stockButton != null)
+                {
                     stockButton.SetTrue(makeCall);
+                    makeCall = false;
+                }
                 else
                     Log.Error("SetTrue called before stockButton is initialized");
             }
-            else
+            //else
+            if (blizzyActive)
             {
                 if (blizzyButton != null)
                     blizzyButton.TexturePath = BlizzyToolbarIconActive;
@@ -844,25 +894,30 @@ namespace ToolbarControl_NS
 
         public void SetFalse(bool makeCall = false)
         {
-            Log.Info("SetFalse");
-            if (stockButton == null && activeToolbarType == ToolBarSelected.stock)
-            {
-                doSetFalse = true;
-                doSetFalseValue = makeCall;
-                return;
-            }
-            if (blizzyButton == null && activeToolbarType == ToolBarSelected.blizzy)
-            {
-                doSetFalse = true;
-                doSetFalseValue = makeCall;
-                return;
-            }
             doSetFalse = false;
-            if (activeToolbarType == ToolBarSelected.stock)
+
+
+            if (stockButton == null && stockActive) 
+            {
+                doSetFalse = true;
+                doSetFalseValue = makeCall;
+            }
+            if (blizzyButton == null && blizzyActive)
+            {
+                doSetFalse = true;
+                doSetFalseValue = makeCall;
+            }
+            if (stockButton == null && blizzyButton == null)
+                return;
+            doSetFalse = false;
+
+            if (stockActive)
             {
                 stockButton.SetFalse(makeCall);
+                makeCall = false;
             }
-            else
+            //else
+            if (blizzyActive)
             {
                 blizzyButton.TexturePath = BlizzyToolbarIconInactive;
                 if (onFalse != null && makeCall)

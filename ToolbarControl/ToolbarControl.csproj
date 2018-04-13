@@ -7,7 +7,7 @@
     <ProjectGuid>{B146B9F2-61CB-4E43-BF7C-8737448116AE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ToolbarControl</RootNamespace>
+    <RootNamespace>ToolbarControl_NS</RootNamespace>
     <AssemblyName>ToolbarControl</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -35,8 +35,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AssemblyVersion.tt</DependentUpon>
     </Compile>
+    <Compile Include="BlizzyOptions.cs" />
+    <Compile Include="IntroWindow.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterUsage.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ToolbarControl.cs" />
     <Compile Include="ToolbarWrapper.cs" />
@@ -58,6 +61,9 @@
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>R:\KSP_1.4.1_dev\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="ClickThroughBlocker">
+      <HintPath>R:\KSP_1.3.1_dev\GameData\ClickThroughBlocker\Plugins\ClickThroughBlocker.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
