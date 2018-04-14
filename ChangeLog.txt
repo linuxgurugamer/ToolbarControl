@@ -1,3 +1,6 @@
+0.1.6.1
+	Added KSPAssembly to AssemblyInfo.cs, will help with load order of DLLs
+
 0.1.6
 	Added code for mods to register with the toolbar Controller
 	Added functions for mods to set and get the setting for the Blizzy toolbar
