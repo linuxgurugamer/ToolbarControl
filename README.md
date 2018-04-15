@@ -2,6 +2,14 @@
 
 An interface to control both the Blizzy Toolbar and the stock Toolbar without having to code for each one.
 
+Most important
+All mods using this should add the following line to the AssemblyInfo.cs file:
+
+	[assembly: KSPAssemblyDependency("ToolbarController", 1, 0)]
+
+This will guarantee the load order.  One benefit is that KSP will output a warning and won't load an assembly if it's dependencies aren't met (which may be better than puking out a bunch of exceptions).  The only other real problem with the forced to the top of the sort list method is that technically there's a couple characters before zero ('~', '!', '@', etc.) and dlls directly in GameData come first too.  Of course someone pretty much has to be trying to break things if you have to worry about this particular case.
+
+
 // If true, activates Blizzy toolbar, if available.  Otherwise, use the stock toolbar
 public void UseBlizzy(bool useBlizzy)
 

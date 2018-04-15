@@ -319,10 +319,9 @@ namespace ToolbarControl_NS
                     lastLarge = large;
 
                     Texture2D tex = GetTexture(lastLarge, false);
-                    if (tex != null)
+                    if (tex != null && stockButton != null)
                         stockButton.SetTexture((Texture)tex);
                 }
-
             }
         }
 
@@ -628,10 +627,10 @@ namespace ToolbarControl_NS
         {
 
             Texture2D tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
-
+            Log.Info("GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
             if (LoadImageFromFile(ref tex, KSPUtil.ApplicationRootPath + "GameData/" + path))
                 return tex;
-            return tex;
+            return null;
         }
         private void OnGUIAppLauncherReady()
         {
