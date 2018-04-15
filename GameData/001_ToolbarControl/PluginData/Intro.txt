@@ -14,5 +14,7 @@ Clicking the button for this mod will bring up a simple window which will look s
 
 For each mod that has registered itself with the Toolbar Controller, there will be a line with two radio buttons and the name of the mod.  The buttons are exclusive, meaning that if you click one, the other will be unset.  In most cases, the change is instantaneous.  The Toolbar Controller itself uses this, so you can immediately see the results.
 
+If the Blizzy toolbar is NOT installed, then all buttons will be shown on the stock toolbar
+
 This intro window will be displayed every time you start the game until you click the button labeled "Hide this window" at the bottom, after which it will not be shown again 
 

@@ -409,6 +409,12 @@ namespace ToolbarControl_NS
         #region SetButtonSettings
         private void SetBlizzySettings()
         {
+            if (!ToolbarManager.ToolbarAvailable)
+            {
+                this.stockActive = true;
+                SetStockSettings();
+                return;
+            }
             if (!this.stockActive)
             {
                 this.RemoveStockButton();
@@ -441,7 +447,7 @@ namespace ToolbarControl_NS
                 GameEvents.onGUIApplicationLauncherDestroyed.Add(this.OnGUIAppLauncherDestroyed);
                 this.OnGUIAppLauncherReady();
             }
-            if (!this.stockActive)
+            if (!this.stockActive && ToolbarManager.ToolbarAvailable)
             {
                 this.RemoveStockButton();
             }

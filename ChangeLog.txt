@@ -1,5 +1,10 @@
+0.1.6.3
+	Fixed nullrefs when blizzy toolbar not installed
+	Added code to always show buttons on stock if lbizzy not installed
+
 0.1.6.2
 	Fixed nullref when setting textures and no stock button set
+
 0.1.6.1
 	Added KSPAssembly to AssemblyInfo.cs, will help with load order of DLLs
 
