@@ -129,7 +129,7 @@ namespace ToolbarControl_NS
             }
             else
             {
-               if (!blizzyActive)
+                if (!blizzyActive)
                 {
                     blizzyActive = true;
                     stockActive = false;
@@ -149,13 +149,13 @@ namespace ToolbarControl_NS
 
 
             if (registeredMods[NameSpace].modToolbarControl.stockActive != s)
-                registeredMods[NameSpace].modToolbarControl.SetStockSettings();     
+                registeredMods[NameSpace].modToolbarControl.SetStockSettings();
 
-            registeredMods[NameSpace].modToolbarControl.blizzyActive = registeredMods[NameSpace].useBlizzy;     
+            registeredMods[NameSpace].modToolbarControl.blizzyActive = registeredMods[NameSpace].useBlizzy;
 
             if (registeredMods[NameSpace].modToolbarControl.blizzyActive != b)
                 registeredMods[NameSpace].modToolbarControl.SetBlizzySettings();
-         
+
             registeredMods[NameSpace].modToolbarControl.UpdateToolbarIcon();
         }
 
@@ -325,27 +325,28 @@ namespace ToolbarControl_NS
             }
         }
 
-#if false
-        void SetupGameScenes(ApplicationLauncher.AppScenes visibleInScenes)
+        public void DisableMutuallyExclusive()
         {
-            List<GameScenes> g = new List<GameScenes>();
-
-            if ((visibleInScenes & ApplicationLauncher.AppScenes.MAINMENU) == ApplicationLauncher.AppScenes.MAINMENU)
-                g.Add(GameScenes.MAINMENU);
-            if ((visibleInScenes & ApplicationLauncher.AppScenes.TRACKSTATION) == ApplicationLauncher.AppScenes.TRACKSTATION)
-                g.Add(GameScenes.TRACKSTATION);
-            if (
-                ((visibleInScenes & ApplicationLauncher.AppScenes.SPH) == ApplicationLauncher.AppScenes.SPH) ||
-                ((visibleInScenes & ApplicationLauncher.AppScenes.VAB) == ApplicationLauncher.AppScenes.VAB))
-                g.Add(GameScenes.EDITOR);
-            if (((visibleInScenes & ApplicationLauncher.AppScenes.MAPVIEW) == ApplicationLauncher.AppScenes.MAPVIEW) ||
-               ((visibleInScenes & ApplicationLauncher.AppScenes.FLIGHT) == ApplicationLauncher.AppScenes.FLIGHT))
-                g.Add(GameScenes.FLIGHT);
-            if ((visibleInScenes & ApplicationLauncher.AppScenes.SPACECENTER) == ApplicationLauncher.AppScenes.SPACECENTER)
-                g.Add(GameScenes.SPACECENTER);
-            gameScenes = g.ToArray();
+            mutuallyExclusive = false;
+            if (stockButton != null)
+                ApplicationLauncher.Instance.DisableMutuallyExclusive(stockButton);
         }
-#endif
+        public void EnableMutuallyExclusive()
+        {
+            if (stockButton != null)
+            {
+                Log.Info("EnableMutuallyExclusive, stock button is not null");
+            }
+            else
+            {
+                Log.Info("EnableMutuallyExclusive, stock button is null");
+            }
+            mutuallyExclusive = true;
+            if (stockButton != null)
+                ApplicationLauncher.Instance.EnableMutuallyExclusive(stockButton);
+
+        }
+
 
         void SetButtonPos()
         {
@@ -371,6 +372,7 @@ namespace ToolbarControl_NS
 
         bool stockActive = false;
         bool blizzyActive = false;
+        private bool mutuallyExclusive = false;
 
         public void SetFalse()
         {
@@ -389,6 +391,8 @@ namespace ToolbarControl_NS
         {
             if (this.stockButton != null)
             {
+                if (mutuallyExclusive)
+                    ApplicationLauncher.Instance.DisableMutuallyExclusive(stockButton);
                 ApplicationLauncher.Instance.RemoveModApplication(this.stockButton);
                 GameEvents.onGUIApplicationLauncherReady.Remove(OnGUIAppLauncherReady);
                 GameEvents.onGUIApplicationLauncherDestroyed.Remove(OnGUIAppLauncherDestroyed);
@@ -425,6 +429,17 @@ namespace ToolbarControl_NS
                 this.blizzyButton = ToolbarManager.Instance.add(nameSpace, toolbarId);
                 this.blizzyButton.ToolTip = ToolTip;
                 this.blizzyButton.OnClick += this.button_Click;
+
+                this.blizzyButton.OnMouseLeave += (e) =>
+                {
+                    doOnHoverOut();
+                };
+
+                this.blizzyButton.OnMouseEnter += (e) =>
+                {
+                    doOnHover();
+                };
+
                 this.blizzyButton.Visibility = new TC_GameScenesVisibility(visibleInScenes);
             }
             if (!this.blizzyActive)
@@ -433,7 +448,16 @@ namespace ToolbarControl_NS
             }
             this.UpdateToolbarIcon();
         }
+#if false
+        private void OnMouseEnter()
+        {
 
+        }
+        private void OnMouseLeave()
+        {
+
+        }
+#endif
         private void SetStockSettings()
         {
             if (!this.blizzyActive)
@@ -505,7 +529,7 @@ namespace ToolbarControl_NS
                         {
                             var tex = (Texture)GetTexture(this.lastLarge, false);
                             if (tex != null)
-                            this.stockButton.SetTexture(tex);
+                                this.stockButton.SetTexture(tex);
                         }
                         else
                         {
@@ -665,6 +689,11 @@ namespace ToolbarControl_NS
                     SetTrue(doSetTrueValue);
                 if (doSetFalse)
                     SetFalse(doSetFalseValue);
+                if (mutuallyExclusive)
+                {
+                    Log.Info("OnGUIAppLauncherReady, EnableMutuallyExclusive, stock button is not null");
+                    ApplicationLauncher.Instance.EnableMutuallyExclusive(stockButton);
+                }
             }
         }
 
@@ -696,6 +725,8 @@ namespace ToolbarControl_NS
         private void doOnEnable() { if (this.onEnable != null) onEnable(); }
         private void doOnDisable() { if (this.onDisable != null) onDisable(); }
 
+
+
         private void button_Click(ClickEvent e)
         {
             SetButtonPos();
@@ -714,7 +745,7 @@ namespace ToolbarControl_NS
             }
         }
 
-#region ActiveInactive
+        #region ActiveInactive
         void SetButtonActive()
         {
             this.buttonActive = true;
@@ -744,14 +775,14 @@ namespace ToolbarControl_NS
                 SetButtonInactive();
             }
         }
-#endregion
+        #endregion
 
         private void OnGUIAppLauncherDestroyed()
         {
             RemoveStockButton();
         }
 
-#region tooltip
+        #region tooltip
         bool drawTooltip = false;
         float starttimeToolTipShown = 0;
         Vector2 tooltipSize;
@@ -820,7 +851,7 @@ namespace ToolbarControl_NS
                 GUI.Label(tooltipRect, ToolTip, HighLogic.Skin.label);
             }
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// Checks whether the given stock button was created by this mod.
@@ -859,7 +890,7 @@ namespace ToolbarControl_NS
                 doSetTrue = true;
                 doSetTrueValue = makeCall;
             }
-            if (blizzyButton == null && blizzyActive) 
+            if (blizzyButton == null && blizzyActive)
             {
                 doSetTrue = true;
                 doSetTrueValue = makeCall;
@@ -902,7 +933,7 @@ namespace ToolbarControl_NS
             doSetFalse = false;
 
 
-            if (stockButton == null && stockActive) 
+            if (stockButton == null && stockActive)
             {
                 doSetFalse = true;
                 doSetFalseValue = makeCall;
