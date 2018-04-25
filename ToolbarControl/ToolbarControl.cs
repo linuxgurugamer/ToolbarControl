@@ -309,10 +309,10 @@ namespace ToolbarControl_NS
             lastSmall = small;
             if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
-                lastLarge = large;
+               
                 blizzyButton.TexturePath = small;
             }
-            else
+            if (stockActive)
             {
                 if (lastLarge != large)
                 {

@@ -1,3 +1,6 @@
+0.1.6.5
+	Fixed issue when both buttons are shown, if the mod was updating the textures, the stock texture wasn't being updated while the Blizzy texture was
+
 0.1.6.4
 	Added two methods, currently only working on the stock button:
 		public void DisableMutuallyExclusive()
