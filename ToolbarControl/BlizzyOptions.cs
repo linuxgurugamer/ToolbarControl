@@ -15,7 +15,7 @@ namespace ToolbarControl_NS
         }
     }
 
-    [KSPAddon(KSPAddon.Startup.SpaceCentre, true)]
+    [KSPAddon(KSPAddon.Startup.MainMenu, true)]
     public class BlizzyOptions : MonoBehaviour
     {
         internal const string MODID = "ToolbarController_NS";
@@ -31,10 +31,11 @@ namespace ToolbarControl_NS
         bool initted = false;
 
         void Start()
-        {
+        { 
+#if false
             if (ToolbarControl.registeredMods.Count == 1)
                 Destroy(this);
-
+#endif
             scrollbar_style.padding = new RectOffset(3, 3, 3, 3);
             scrollbar_style.border = new RectOffset(3, 3, 3, 3);
             scrollbar_style.margin = new RectOffset(1, 1, 1, 1);
@@ -72,7 +73,7 @@ namespace ToolbarControl_NS
             GUIContent content = new GUIContent("a");
             Vector2 size = GUI.skin.toggle.CalcSize(content);
 
-            scrollBarHeight = Math.Min(Screen.height - 200, ToolbarControl.registeredMods.Count * (9 + (int)size.y));
+            scrollBarHeight = Math.Min(Screen.height /4 * 3 - 150, ToolbarControl.registeredMods.Count * (9 + (int)size.y) + 150);
 
             // and calculate the window dimensions
             double WindowX = (Screen.width - 400) / 2;
@@ -186,7 +187,7 @@ namespace ToolbarControl_NS
                     if (ToolbarControl.registeredMods[mod.Key].modToolbarControl != null)
                         ToolbarControl.registeredMods[mod.Key].modToolbarControl.UseButtons(mod.Key);
                     else
-                        Log.Info("mod.Key: " + mod.Key + " toolbarControl is null");
+                        Log.Info("mod.Key: " + mod.Key + " modToolbarControl is null");
                 }
                 GUI.enabled = true;
                 GUILayout.Label(" " + mod.Value.displayName);

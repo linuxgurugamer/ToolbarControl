@@ -1,3 +1,10 @@
+
+0.1.6.x
+	Added IsHovering
+	Added Position (only for stock button)
+	Changed startup for registeration from MainMenu to instantly
+	Added sorted list by mod id
+
 0.1.6.5
 	Fixed issue when both buttons are shown, if the mod was updating the textures, the stock texture wasn't being updated while the Blizzy texture was
 

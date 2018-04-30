@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using KSP.UI;
 using KSP.UI.Screens;
 using DDSHeaders;
 
@@ -266,6 +267,14 @@ namespace ToolbarControl_NS
             ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId, string largeToolbarIconActive, string largeToolbarIconInactive, string smallToolbarIconActive, string smallToolbarIconInactive, string toolTip = null)
 
         {
+            Log.Info("AddToAlltoolbars main, nameSpace: " + nameSpace + ",  toolbarId: " + toolbarId +
+                ",  largeToolbarIconActive: " + largeToolbarIconActive + ", largeToolbarIconInactive: " + largeToolbarIconInactive +
+                ", smallToolbarIconActive: " + smallToolbarIconActive + ", smallToolbarIconInactive: " + smallToolbarIconInactive
+                );
+            if (toolTip == null)
+                Log.Info("toolTip is null");
+            else
+                Log.Info("toolTip: " + toolTip);
             this.onTrue = onTrue;
             this.onFalse = onFalse;
             this.onHover = onHover;
@@ -282,7 +291,7 @@ namespace ToolbarControl_NS
             this.StockToolbarIconInactive = largeToolbarIconInactive;
             try
             {
-                if (HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)
+                //if (HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)                
                     this.ToolTip = toolTip;
             }
             catch { }
@@ -293,6 +302,8 @@ namespace ToolbarControl_NS
                 registeredMods[nameSpace].modToolbarControl = this;
                 UseButtons(nameSpace);
             }
+            else
+                Log.Info("Missing namespace: " + nameSpace);
         }
 
         string lastLarge = "";
@@ -324,6 +335,35 @@ namespace ToolbarControl_NS
                 }
             }
         }
+#if true
+        public bool IsHovering
+        {
+            get
+            {
+                return stockButton.IsHovering || blizzyButton.IsHovering;
+            }
+        }
+
+        public Rect? Position
+        {
+            get
+            {
+                if (stockButton != null && stockButton.IsHovering)
+                {
+                    Camera _camera = UIMainCamera.Camera;
+                    Vector3 _pos = _camera.WorldToScreenPoint(stockButton.GetAnchorUL());
+                    return new Rect(_pos.x, Screen.height - _pos.y, 41, 41);
+                }
+#if false
+                if (blizzyButton != null && blizzyButton.IsHovering)
+                {
+                    return new Rect(blizyButton.Position());
+                }
+#endif
+                return null;
+            }
+        }
+#endif
 
         public void DisableMutuallyExclusive()
         {
@@ -410,7 +450,7 @@ namespace ToolbarControl_NS
             }
         }
 
-        #region SetButtonSettings
+#region SetButtonSettings
         private void SetBlizzySettings()
         {
             if (!ToolbarManager.ToolbarAvailable)
@@ -426,6 +466,7 @@ namespace ToolbarControl_NS
 
             if (this.blizzyButton == null && this.blizzyActive)
             {
+                Log.Info("Adding blizzyButton, nameSpace: " + nameSpace + ", toolbarId: " + toolbarId + ", ToolTip: " + ToolTip);
                 this.blizzyButton = ToolbarManager.Instance.add(nameSpace, toolbarId);
                 this.blizzyButton.ToolTip = ToolTip;
                 this.blizzyButton.OnClick += this.button_Click;
@@ -477,7 +518,7 @@ namespace ToolbarControl_NS
             }
             this.UpdateToolbarIcon(true);
         }
-        #endregion
+#endregion
 
         private void StartAfterInit()
         {
@@ -745,7 +786,7 @@ namespace ToolbarControl_NS
             }
         }
 
-        #region ActiveInactive
+#region ActiveInactive
         void SetButtonActive()
         {
             this.buttonActive = true;
@@ -775,14 +816,14 @@ namespace ToolbarControl_NS
                 SetButtonInactive();
             }
         }
-        #endregion
+#endregion
 
         private void OnGUIAppLauncherDestroyed()
         {
             RemoveStockButton();
         }
 
-        #region tooltip
+#region tooltip
         bool drawTooltip = false;
         float starttimeToolTipShown = 0;
         Vector2 tooltipSize;
@@ -851,7 +892,7 @@ namespace ToolbarControl_NS
                 GUI.Label(tooltipRect, ToolTip, HighLogic.Skin.label);
             }
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Checks whether the given stock button was created by this mod.

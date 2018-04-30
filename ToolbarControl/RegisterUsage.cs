@@ -27,7 +27,9 @@ namespace ToolbarControl_NS
             }
         }
 
-        internal static Dictionary<string, Mod> registeredMods = new Dictionary<string, Mod>();
+        //internal static SortedDictionary<string, Mod> registeredMods = new SortedDictionary<string, Mod>();
+
+        internal static Dictionary<string, Mod> registeredMods = new Dictionary<string, Mod>(StringComparer.InvariantCultureIgnoreCase);
 
         static string ConfigFile = KSPUtil.ApplicationRootPath + "GameData/001_ToolbarControl/PluginData/ToolbarControl.cfg";
         const string TOOLBARCONTROL = "ToolbarControl";
@@ -115,6 +117,7 @@ namespace ToolbarControl_NS
 
             if (registeredMods.ContainsKey(NameSpace))
             {
+                Log.Info("RegisterMod, found, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
                 if (DisplayName != "")
                     registeredMods[NameSpace].displayName = DisplayName;
 
@@ -126,6 +129,7 @@ namespace ToolbarControl_NS
             {
                 if (DisplayName == "")
                     DisplayName = NameSpace;
+                Log.Info("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
                 Mod mod = new Mod(DisplayName, useBlizzy, useStock, NoneAllowed);
                 registeredMods.Add(NameSpace, mod);
                 SaveData();
