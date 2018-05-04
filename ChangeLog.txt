@@ -1,9 +1,14 @@
 
-0.1.6.x
+0.1.6.6
 	Added IsHovering
-	Added Position (only for stock button)
+	Added StockPosition
+	Added BlizzyPosition ( placeholder for now)
 	Changed startup for registeration from MainMenu to instantly
 	Added sorted list by mod id
+	Reduced size of ToolbarController window
+	Added two new methods:
+		bool IsStockButtonManaged(ApplicationLauncherButton button, out string nameSpace, out string id, out string toolTip)
+		bool IsBlizzyButtonManaged(IButton blizzyButton, out string nameSpace, out string id, out string toolTip)
 
 0.1.6.5
 	Fixed issue when both buttons are shown, if the mod was updating the textures, the stock texture wasn't being updated while the Blizzy texture was

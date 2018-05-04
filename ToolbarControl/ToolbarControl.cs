@@ -335,7 +335,7 @@ namespace ToolbarControl_NS
                 }
             }
         }
-#if true
+
         public bool IsHovering
         {
             get
@@ -344,26 +344,24 @@ namespace ToolbarControl_NS
             }
         }
 
-        public Rect? Position
+        public Rect? StockPosition
         {
             get
             {
-                if (stockButton != null && stockButton.IsHovering)
+                if (stockButton != null)
                 {
                     Camera _camera = UIMainCamera.Camera;
                     Vector3 _pos = _camera.WorldToScreenPoint(stockButton.GetAnchorUL());
                     return new Rect(_pos.x, Screen.height - _pos.y, 41, 41);
                 }
-#if false
-                if (blizzyButton != null && blizzyButton.IsHovering)
-                {
-                    return new Rect(blizyButton.Position());
-                }
-#endif
                 return null;
             }
         }
-#endif
+
+        public Rect? BlizzyPosition
+        {
+            get { return null;  }
+        }
 
         public void DisableMutuallyExclusive()
         {
@@ -901,10 +899,11 @@ namespace ToolbarControl_NS
         /// <param name="nameSpace">The namespace of the button</param>
         /// <param name="id">the unique ID of the button</param>
         /// <returns>true, if the button was created by the mod, false otherwise</returns>
-        public static bool IsStockButtonManaged(ApplicationLauncherButton button, out string nameSpace, out string id)
+        public static bool IsStockButtonManaged(ApplicationLauncherButton button, out string nameSpace, out string id, out string toolTip)
         {
             nameSpace = "";
             id = "";
+            toolTip = "";
             if (tcList == null)
                 return false;
             foreach (var b in tcList)
@@ -915,6 +914,38 @@ namespace ToolbarControl_NS
                     {
                         nameSpace = b.nameSpace;
                         id = b.toolbarId;
+                        toolTip = b.toolTip;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+  
+
+        /// <summary>
+        /// Checks whether the given stock button was created by this mod.
+        /// </summary>
+        /// <param name="button">the button to check</param>
+        /// <param name="nameSpace">The namespace of the button</param>
+        /// <param name="id">the unique ID of the button</param>
+        /// <returns>true, if the button was created by the mod, false otherwise</returns>
+        public static bool IsBlizzyButtonManaged(IButton blizzyButton, out string nameSpace, out string id, out string toolTip)
+        {
+            nameSpace = "";
+            id = "";
+            toolTip = "";
+            if (tcList == null)
+                return false;
+            foreach (var b in tcList)
+            {
+                if (b.stockActive)
+                {
+                    if (b.blizzyButton == blizzyButton)
+                    {
+                        nameSpace = b.nameSpace;
+                        id = b.toolbarId;
+                        toolTip = b.toolTip;
                         return true;
                     }
                 }

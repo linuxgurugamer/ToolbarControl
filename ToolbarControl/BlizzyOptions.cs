@@ -2,6 +2,7 @@
 using UnityEngine;
 using KSP.UI.Screens;
 using ClickThroughFix;
+using System.Linq;
 
 namespace ToolbarControl_NS
 {
@@ -118,42 +119,46 @@ namespace ToolbarControl_NS
             GUILayout.Label("None", GUILayout.Width(50));
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
+
+            //ToolbarControl.sortedModList = ToolbarControl.sortedModList.OrderBy(x => x.displayName).ToList();
+            
+
             scrollVector = GUILayout.BeginScrollView(scrollVector, scrollbar_style, GUILayout.Height(scrollBarHeight));
 
-            foreach (var mod in ToolbarControl.registeredMods)
+            foreach (var mod in ToolbarControl.sortedModList)
             {
                 bool doUseButtons = false;
                 GUILayout.BeginHorizontal();
-                bool stock = GUILayout.Toggle(mod.Value.useStock, "", GUILayout.Width(60));
-                if (stock != mod.Value.useStock)
+                bool stock = GUILayout.Toggle(mod.useStock, "", GUILayout.Width(60));
+                if (stock != mod.useStock)
                 {
-                    if (ToolbarControl.registeredMods[mod.Key].useStock == ToolbarControl.registeredMods[mod.Key].useBlizzy &&
-                        ToolbarControl.registeredMods[mod.Key].useStock)
+                    if (ToolbarControl.registeredMods[mod.modId].useStock == ToolbarControl.registeredMods[mod.modId].useBlizzy &&
+                        ToolbarControl.registeredMods[mod.modId].useStock)
                     {
-                        ToolbarControl.registeredMods[mod.Key].useBlizzy = false;
+                        ToolbarControl.registeredMods[mod.modId].useBlizzy = false;
                     }
                     else
                     {
-                        ToolbarControl.registeredMods[mod.Key].useStock = stock;
-                        ToolbarControl.registeredMods[mod.Key].useBlizzy = !stock;
+                        ToolbarControl.registeredMods[mod.modId].useStock = stock;
+                        ToolbarControl.registeredMods[mod.modId].useBlizzy = !stock;
                     }
                
                     doUseButtons = true;
                 }
 
-                bool blizzy = GUILayout.Toggle(mod.Value.useBlizzy, "", GUILayout.Width(50));
+                bool blizzy = GUILayout.Toggle(mod.useBlizzy, "", GUILayout.Width(50));
 
-                if (blizzy != mod.Value.useBlizzy)
+                if (blizzy != ToolbarControl.registeredMods[mod.modId].useBlizzy)
                 {
-                    if (ToolbarControl.registeredMods[mod.Key].useStock == ToolbarControl.registeredMods[mod.Key].useBlizzy &&
-                          ToolbarControl.registeredMods[mod.Key].useBlizzy)
+                    if (ToolbarControl.registeredMods[mod.modId].useStock == ToolbarControl.registeredMods[mod.modId].useBlizzy &&
+                          ToolbarControl.registeredMods[mod.modId].useBlizzy)
                     {
-                        ToolbarControl.registeredMods[mod.Key].useStock = false;
+                        ToolbarControl.registeredMods[mod.modId].useStock = false;
                     }
                     else
                     {
-                        ToolbarControl.registeredMods[mod.Key].useBlizzy = blizzy;
-                        ToolbarControl.registeredMods[mod.Key].useStock = !blizzy;
+                        ToolbarControl.registeredMods[mod.modId].useBlizzy = blizzy;
+                        ToolbarControl.registeredMods[mod.modId].useStock = !blizzy;
                     }
 
                     doUseButtons = true;
@@ -163,20 +168,20 @@ namespace ToolbarControl_NS
                 bool newboth = GUILayout.Toggle(both, "", GUILayout.Width(50));
                 if (newboth != both)
                 {
-                    ToolbarControl.registeredMods[mod.Key].useBlizzy = true;
-                    ToolbarControl.registeredMods[mod.Key].useStock = true;
+                    ToolbarControl.registeredMods[mod.modId].useBlizzy = true;
+                    ToolbarControl.registeredMods[mod.modId].useStock = true;
 
                     doUseButtons = true;
                 }
-                if (!ToolbarControl.registeredMods[mod.Key].noneAllowed)
+                if (!ToolbarControl.registeredMods[mod.modId].noneAllowed)
                     GUI.enabled = false;
                 bool none = (!stock & !blizzy);
                 bool newnone = GUILayout.Toggle(none, "", GUILayout.Width(25));
                 if (newnone != none)
                 {
 
-                    ToolbarControl.registeredMods[mod.Key].useBlizzy = false;
-                    ToolbarControl.registeredMods[mod.Key].useStock = false;
+                    ToolbarControl.registeredMods[mod.modId].useBlizzy = false;
+                    ToolbarControl.registeredMods[mod.modId].useStock = false;
 
                     doUseButtons = true;
                 }
@@ -184,13 +189,13 @@ namespace ToolbarControl_NS
                 if (doUseButtons)
                 {
                     ToolbarControl.SaveData();
-                    if (ToolbarControl.registeredMods[mod.Key].modToolbarControl != null)
-                        ToolbarControl.registeredMods[mod.Key].modToolbarControl.UseButtons(mod.Key);
+                    if (ToolbarControl.registeredMods[mod.modId].modToolbarControl != null)
+                        ToolbarControl.registeredMods[mod.modId].modToolbarControl.UseButtons(mod.modId);
                     else
-                        Log.Info("mod.Key: " + mod.Key + " modToolbarControl is null");
+                        Log.Info("mod.Key: " + mod.modId + " modToolbarControl is null");
                 }
                 GUI.enabled = true;
-                GUILayout.Label(" " + mod.Value.displayName);
+                GUILayout.Label(" " + mod.displayName);
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
             }

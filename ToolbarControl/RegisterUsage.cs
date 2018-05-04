@@ -11,14 +11,16 @@ namespace ToolbarControl_NS
     {
         internal class Mod
         {
+            public string modId;
             public string displayName;
             public bool useBlizzy;
             public bool useStock;
             public bool noneAllowed = true;
             public ToolbarControl modToolbarControl;
 
-            public Mod(string DisplayName, bool UseBlizzy, bool UseStock, bool NoneAllowed = true)
+            public Mod(string ModId, string DisplayName, bool UseBlizzy, bool UseStock, bool NoneAllowed = true)
             {
+                modId = ModId;
                 displayName = DisplayName;
                 useBlizzy = UseBlizzy;
                 useStock = UseStock;
@@ -29,7 +31,10 @@ namespace ToolbarControl_NS
 
         //internal static SortedDictionary<string, Mod> registeredMods = new SortedDictionary<string, Mod>();
 
-        internal static Dictionary<string, Mod> registeredMods = new Dictionary<string, Mod>(StringComparer.InvariantCultureIgnoreCase);
+        internal static Dictionary<string, Mod> registeredMods = new Dictionary<string, Mod>();
+        internal static List<Mod> sortedModList = new List<Mod>();
+
+        //internal static List<Mod> registeredMods = new List<Mod>();
 
         static string ConfigFile = KSPUtil.ApplicationRootPath + "GameData/001_ToolbarControl/PluginData/ToolbarControl.cfg";
         const string TOOLBARCONTROL = "ToolbarControl";
@@ -104,9 +109,11 @@ namespace ToolbarControl_NS
                             noneAllowed = ToBool(node.GetValue("noneAllowed"));
 
 
-                        Mod mod = new Mod(displayName, useBlizzy, useStock, noneAllowed);
+                        Mod mod = new Mod(modName, displayName, useBlizzy, useStock, noneAllowed);
                         registeredMods.Add(modName, mod);
+                        sortedModList.Add(mod);
                     }
+                    sortedModList.Sort((x, y) => x.displayName.CompareTo(y.displayName));
                 }
             }
         }
@@ -130,8 +137,12 @@ namespace ToolbarControl_NS
                 if (DisplayName == "")
                     DisplayName = NameSpace;
                 Log.Info("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
-                Mod mod = new Mod(DisplayName, useBlizzy, useStock, NoneAllowed);
+                Mod mod = new Mod(NameSpace, DisplayName, useBlizzy, useStock, NoneAllowed);
                 registeredMods.Add(NameSpace, mod);
+                sortedModList.Add(mod);
+                
+                sortedModList.Sort((x, y) => x.displayName.CompareTo(y.displayName));
+
                 SaveData();
                 return true;
             }
