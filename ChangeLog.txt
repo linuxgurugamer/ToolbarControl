@@ -1,3 +1,6 @@
+0.1.6.7
+	Fixed repaint issues causing NullRefs
+	Now only shows mods which have regeristed in the current game, it still remembers all of them
 
 0.1.6.6
 	Added IsHovering

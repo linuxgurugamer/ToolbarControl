@@ -199,7 +199,7 @@ namespace ToolbarControl_NS
                 showHelp = false;
             }
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Hide this window"))
+            if (GUILayout.Button("Hide this window at startup"))
             {
                 showHelp = false;
                 showIntroAtStartup = false;

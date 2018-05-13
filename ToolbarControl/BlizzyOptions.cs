@@ -84,15 +84,30 @@ namespace ToolbarControl_NS
 
             initted = true;
         }
-
+        internal static GUIStyle windowStyle = null;
         void OnGUI()
         {
             if (!GUIEnabled)
                 return;
             if (!initted)
                 InitGUIStuff();
+            if (windowStyle == null)
+            {
+                GUI.color = Color.grey;
+                windowStyle = new GUIStyle(HighLogic.Skin.window);
+                windowStyle.active.background = windowStyle.normal.background;
+                Texture2D tex = windowStyle.normal.background;
+                var pixels = tex.GetPixels32();
 
-            WindowRect = ClickThruBlocker.GUILayoutWindow(4946386, WindowRect, DoWindow, "Toolbar Controller", IntroWindowClass.windowStyle);
+                for (int i = 0; i < pixels.Length; ++i)
+                    pixels[i].a = 255;
+
+                tex.SetPixels32(pixels); tex.Apply();
+                windowStyle.active.background =
+                windowStyle.focused.background =
+                windowStyle.normal.background = tex;
+            }
+            WindowRect = ClickThruBlocker.GUILayoutWindow(4946386, WindowRect, DoWindow, "Toolbar Controller", windowStyle);
         }
 
         void OnDestroy()
@@ -110,6 +125,7 @@ namespace ToolbarControl_NS
             GUILayout.BeginHorizontal();
             GUILayout.Label("If the Blizzy toobar is not installed, all buttons will be put on the stock toolbar, regardless of the setting");
             GUILayout.EndHorizontal();
+
             GUILayout.Space(10);
 
             GUILayout.BeginHorizontal();
@@ -121,7 +137,7 @@ namespace ToolbarControl_NS
             GUILayout.BeginHorizontal();
 
             //ToolbarControl.sortedModList = ToolbarControl.sortedModList.OrderBy(x => x.displayName).ToList();
-            
+
 
             scrollVector = GUILayout.BeginScrollView(scrollVector, scrollbar_style, GUILayout.Height(scrollBarHeight));
 
@@ -200,7 +216,9 @@ namespace ToolbarControl_NS
                 GUILayout.EndHorizontal();
             }
             GUILayout.EndScrollView();
+
             GUILayout.EndHorizontal();
+
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Close"))
@@ -215,6 +233,7 @@ namespace ToolbarControl_NS
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+
             GUI.DragWindow();
         }
     }

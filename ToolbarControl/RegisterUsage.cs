@@ -17,6 +17,7 @@ namespace ToolbarControl_NS
             public bool useStock;
             public bool noneAllowed = true;
             public ToolbarControl modToolbarControl;
+            public bool registered = false;
 
             public Mod(string ModId, string DisplayName, bool UseBlizzy, bool UseStock, bool NoneAllowed = true)
             {
@@ -111,9 +112,9 @@ namespace ToolbarControl_NS
 
                         Mod mod = new Mod(modName, displayName, useBlizzy, useStock, noneAllowed);
                         registeredMods.Add(modName, mod);
-                        sortedModList.Add(mod);
+                        // sortedModList.Add(mod);
                     }
-                    sortedModList.Sort((x, y) => x.displayName.CompareTo(y.displayName));
+                    //sortedModList.Sort((x, y) => x.displayName.CompareTo(y.displayName));
                 }
             }
         }
@@ -121,7 +122,8 @@ namespace ToolbarControl_NS
         public static bool RegisterMod(string NameSpace, string DisplayName = "", bool useBlizzy = false, bool useStock = true, bool NoneAllowed = true)
         {
             LoadData();
-
+            Mod mod = null;
+            Log.Error("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
             if (registeredMods.ContainsKey(NameSpace))
             {
                 Log.Info("RegisterMod, found, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
@@ -129,24 +131,35 @@ namespace ToolbarControl_NS
                     registeredMods[NameSpace].displayName = DisplayName;
 
                 registeredMods[NameSpace].noneAllowed = NoneAllowed;
+                registeredMods[NameSpace].registered = true;
+                mod = registeredMods[NameSpace];
                 SaveData();
-                return true;
+
             }
-            try
+            else
+                try
+                {
+                    if (DisplayName == "")
+                        DisplayName = NameSpace;
+                    Log.Info("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
+                    mod = new Mod(NameSpace, DisplayName, useBlizzy, useStock, NoneAllowed);
+                    registeredMods.Add(NameSpace, mod);
+
+                    SaveData();
+
+                }
+                catch { return false; }
+            if (mod != null)
             {
-                if (DisplayName == "")
-                    DisplayName = NameSpace;
-                Log.Info("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
-                Mod mod = new Mod(NameSpace, DisplayName, useBlizzy, useStock, NoneAllowed);
-                registeredMods.Add(NameSpace, mod);
                 sortedModList.Add(mod);
-                
+
                 sortedModList.Sort((x, y) => x.displayName.CompareTo(y.displayName));
 
-                SaveData();
                 return true;
             }
-            catch { return false; }
+            // Should never get here
+            Log.Error("Impossible Error");
+            return false;
         }
 
 
