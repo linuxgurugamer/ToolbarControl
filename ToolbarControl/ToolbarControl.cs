@@ -260,8 +260,9 @@ namespace ToolbarControl_NS
                 if (onRightClick != null)
                     stockButton.onRightClick = (Callback)Delegate.Combine(stockButton.onRightClick, this.onRightClick); //combine delegates together
             }
-
         }
+
+
 
         public void AddToAllToolbars(TC_ClickHandler onTrue, TC_ClickHandler onFalse, TC_ClickHandler onHover, TC_ClickHandler onHoverOut, TC_ClickHandler onEnable, TC_ClickHandler onDisable,
             ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId, string largeToolbarIconActive, string largeToolbarIconInactive, string smallToolbarIconActive, string smallToolbarIconInactive, string toolTip = null)
@@ -559,7 +560,7 @@ namespace ToolbarControl_NS
             if (this.stockActive)
             {
                 if (this.stockButton == null && !firstTime)
-                    Log.Error("stockButton is null, " + ",  namespace: " + this.nameSpace);
+                    Log.Error("stockButton is null, namespace: " + this.nameSpace);
                 else
                 {
                     if (this.stockButton != null)
@@ -568,13 +569,19 @@ namespace ToolbarControl_NS
                         {
                             var tex = (Texture)GetTexture(this.lastLarge, false);
                             if (tex != null)
+                            {
                                 this.stockButton.SetTexture(tex);
+                                Log.Info("UpdateToolbarIcon, lastLarge: " + lastLarge + ", tex: " + tex);
+                            }
                         }
                         else
                         {
                             var tex = (Texture)GetTexture(this.buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive, false);
                             if (tex != null)
+                            {
                                 this.stockButton.SetTexture(tex);
+                                Log.Info("UpdateToolbarIcon, tex: " + tex);
+                            }
                         }
                     }
                 }
@@ -657,10 +664,8 @@ namespace ToolbarControl_NS
                 }
                 else
                 {
-                    Log.Error("Cannot find texture to load:" + fileNamePath);
+                    Log.Info("Cannot find texture to load from file:" + fileNamePath);
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -694,11 +699,23 @@ namespace ToolbarControl_NS
 
         Texture2D GetTexture(string path, bool b)
         {
+            Log.Info("GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
 
             Texture2D tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
-            Log.Info("GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
+
+            // Since most mods have their button textures in files, try loading from the file first
+
             if (LoadImageFromFile(ref tex, KSPUtil.ApplicationRootPath + "GameData/" + path))
                 return tex;
+            if (GameDatabase.Instance.ExistsTexture(path))
+            {
+                tex = GameDatabase.Instance.GetTexture(path, false);
+                return tex;
+            }
+
+     
+            Log.Error("Cannot find texture to load:" + path);
+  
             return null;
         }
         private void OnGUIAppLauncherReady()

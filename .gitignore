@@ -232,4 +232,5 @@ $RECYCLE.BIN/
 *.swp
 *.dll
 *.pdb
-.vs/
+.vs/*
+
