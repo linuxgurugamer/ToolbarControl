@@ -119,7 +119,7 @@ namespace ToolbarControl_NS
         public void UseStock(bool useStock)
         {
 
-            if (useStock)
+            if (!ToolbarManager.ToolbarAvailable || useStock)
             {
                 if (!stockActive)
                 {
@@ -183,7 +183,7 @@ namespace ToolbarControl_NS
                 else
                     this.stockButton.Disable();
             }
-            if (blizzyActive)
+            if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
                 if (blizzyButton == null)
                     return;
@@ -539,7 +539,7 @@ namespace ToolbarControl_NS
 
             }
 
-            if (blizzyActive)
+            if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
                 RemoveBlizzyButton();
             }
@@ -549,7 +549,7 @@ namespace ToolbarControl_NS
         {
             SetIsEnabled(isEnabled);
 
-            if (this.blizzyActive && this.blizzyButton != null)
+            if (ToolbarManager.ToolbarAvailable && this.blizzyActive && this.blizzyButton != null)
             {
                 if (this.lastSmall != "")
                     this.blizzyButton.TexturePath = lastSmall;
@@ -979,7 +979,7 @@ namespace ToolbarControl_NS
                 doSetTrue = true;
                 doSetTrueValue = makeCall;
             }
-            if (blizzyButton == null && blizzyActive)
+            if (ToolbarManager.ToolbarAvailable && blizzyButton == null && blizzyActive)
             {
                 doSetTrue = true;
                 doSetTrueValue = makeCall;
@@ -999,7 +999,7 @@ namespace ToolbarControl_NS
                     Log.Error("SetTrue called before stockButton is initialized");
             }
             //else
-            if (blizzyActive)
+            if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
                 if (blizzyButton != null)
                     blizzyButton.TexturePath = BlizzyToolbarIconActive;
@@ -1027,7 +1027,7 @@ namespace ToolbarControl_NS
                 doSetFalse = true;
                 doSetFalseValue = makeCall;
             }
-            if (blizzyButton == null && blizzyActive)
+            if (blizzyButton == null && ToolbarManager.ToolbarAvailable && blizzyActive)
             {
                 doSetFalse = true;
                 doSetFalseValue = makeCall;
@@ -1042,7 +1042,7 @@ namespace ToolbarControl_NS
                 makeCall = false;
             }
             //else
-            if (blizzyActive)
+            if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
                 blizzyButton.TexturePath = BlizzyToolbarIconInactive;
                 if (onFalse != null && makeCall)

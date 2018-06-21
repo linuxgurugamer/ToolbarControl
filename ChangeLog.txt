@@ -1,3 +1,9 @@
+0.1.6.10
+	Fixed Nullref when Blizzy toolbar not installed and buttons were selected to be on the Blizzy button
+
+0.1.6.9
+	Updated .version file for all 1.4
+
 0.1.6.8
 	Added code to load button textures from game database instead of the disk for the stock toolbar
 

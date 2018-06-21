@@ -39,6 +39,11 @@
     <Compile Include="IntroWindow.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RegisterUsage.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ToolbarControl.cs" />
@@ -49,6 +54,19 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AssemblyVersion.cs</LastGenOutput>
     </Content>
+    <None Include="Resources\sheet-38.png" />
+    <None Include="Resources\sheet.png" />
+    <None Include="Resources\flask-38.png" />
+    <None Include="Resources\flask.png" />
+    <None Include="Resources\btnUnlock.png" />
+    <None Include="Resources\btnSave.png" />
+    <None Include="Resources\btnRename.png" />
+    <None Include="Resources\btnOpen.png" />
+    <None Include="Resources\btnLock.png" />
+    <None Include="Resources\btnExpand.png" />
+    <None Include="Resources\btnDelete.png" />
+    <None Include="Resources\btnClose.png" />
+    <None Include="Resources\btnBackground.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -67,6 +85,7 @@
       <HintPath>R:\KSP_1.4.3_dev\GameData\ClickThroughBlocker\Plugins\ClickThroughBlocker.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>R:\KSP_1.4.3_dev\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
@@ -75,6 +94,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>R:\KSP_1.4.3_dev\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
