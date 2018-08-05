@@ -268,14 +268,14 @@ namespace ToolbarControl_NS
             ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId, string largeToolbarIconActive, string largeToolbarIconInactive, string smallToolbarIconActive, string smallToolbarIconInactive, string toolTip = null)
 
         {
-            Log.Info("AddToAlltoolbars main, nameSpace: " + nameSpace + ",  toolbarId: " + toolbarId +
+            Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "AddToAlltoolbars main, nameSpace: " + nameSpace + ",  toolbarId: " + toolbarId +
                 ",  largeToolbarIconActive: " + largeToolbarIconActive + ", largeToolbarIconInactive: " + largeToolbarIconInactive +
                 ", smallToolbarIconActive: " + smallToolbarIconActive + ", smallToolbarIconInactive: " + smallToolbarIconInactive
                 );
             if (toolTip == null)
-                Log.Info("toolTip is null");
+                Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "toolTip is null");
             else
-                Log.Info("toolTip: " + toolTip);
+                Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "toolTip: " + toolTip);
             this.onTrue = onTrue;
             this.onFalse = onFalse;
             this.onHover = onHover;
@@ -304,7 +304,7 @@ namespace ToolbarControl_NS
                 UseButtons(nameSpace);
             }
             else
-                Log.Info("Missing namespace: " + nameSpace);
+                Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Missing namespace: " + nameSpace);
         }
 
         string lastLarge = "";
@@ -370,6 +370,7 @@ namespace ToolbarControl_NS
             if (stockButton != null)
                 ApplicationLauncher.Instance.DisableMutuallyExclusive(stockButton);
         }
+
         public void EnableMutuallyExclusive()
         {
             if (stockButton != null)
@@ -465,7 +466,7 @@ namespace ToolbarControl_NS
 
             if (this.blizzyButton == null && this.blizzyActive)
             {
-                Log.Info("Adding blizzyButton, nameSpace: " + nameSpace + ", toolbarId: " + toolbarId + ", ToolTip: " + ToolTip);
+                Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Adding blizzyButton, nameSpace: " + nameSpace + ", toolbarId: " + toolbarId + ", ToolTip: " + ToolTip);
                 this.blizzyButton = ToolbarManager.Instance.add(nameSpace, toolbarId);
                 this.blizzyButton.ToolTip = ToolTip;
                 this.blizzyButton.OnClick += this.button_Click;
@@ -571,7 +572,6 @@ namespace ToolbarControl_NS
                             if (tex != null)
                             {
                                 this.stockButton.SetTexture(tex);
-                                Log.Info("UpdateToolbarIcon, lastLarge: " + lastLarge + ", tex: " + tex);
                             }
                         }
                         else
@@ -580,7 +580,6 @@ namespace ToolbarControl_NS
                             if (tex != null)
                             {
                                 this.stockButton.SetTexture(tex);
-                                Log.Info("UpdateToolbarIcon, tex: " + tex);
                             }
                         }
                     }
@@ -664,7 +663,7 @@ namespace ToolbarControl_NS
                 }
                 else
                 {
-                    Log.Info("Cannot find texture to load from file:" + fileNamePath);
+                    Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Cannot find texture to load from file:" + fileNamePath);
                 }
             }
             catch (Exception ex)
@@ -699,7 +698,7 @@ namespace ToolbarControl_NS
 
         Texture2D GetTexture(string path, bool b)
         {
-            Log.Info("GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
+            Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
 
             Texture2D tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
 

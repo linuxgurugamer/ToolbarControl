@@ -29,6 +29,12 @@ namespace ToolbarControl_NS
                    toolTip = "Time tooltip stays around")]
         public float hoverTimeout = 0.5f;
 
+        [GameParameters.CustomParameterUI("Debug mode",
+                    toolTip = "Writes extra data to the log file")]
+        public bool debugMode = false;
+
+
+
         public override void SetDifficultyPreset(GameParameters.Preset preset)
         {
         }

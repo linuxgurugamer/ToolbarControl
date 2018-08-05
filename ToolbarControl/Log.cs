@@ -96,6 +96,16 @@ namespace ToolbarControl_NS
             }
         }
 
+        public static void Debug(bool debugMode, String msg)
+        {
+            if (debugMode)
+            {
+                UnityEngine.Debug.LogError(PREFIX + msg);
+            }
+            else
+                Log.Info(msg);
+        }
+
         public static void Exception(Exception e)
         {
             Log.Error("exception caught: " + e.GetType() + ": " + e.Message);

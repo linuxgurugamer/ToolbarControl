@@ -109,7 +109,6 @@ namespace ToolbarControl_NS
                         if (node.HasValue("noneAllowed"))
                             noneAllowed = ToBool(node.GetValue("noneAllowed"));
 
-
                         Mod mod = new Mod(modName, displayName, useBlizzy, useStock, noneAllowed);
                         registeredMods.Add(modName, mod);
                         // sortedModList.Add(mod);
@@ -123,7 +122,7 @@ namespace ToolbarControl_NS
         {
             LoadData();
             Mod mod = null;
-            Log.Error("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
+            Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
             if (registeredMods.ContainsKey(NameSpace))
             {
                 Log.Info("RegisterMod, found, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);

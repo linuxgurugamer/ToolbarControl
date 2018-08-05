@@ -208,7 +208,7 @@ namespace ToolbarControl_NS
                     if (ToolbarControl.registeredMods[mod.modId].modToolbarControl != null)
                         ToolbarControl.registeredMods[mod.modId].modToolbarControl.UseButtons(mod.modId);
                     else
-                        Log.Info("mod.Key: " + mod.modId + " modToolbarControl is null");
+                        Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "mod.Key: " + mod.modId + " modToolbarControl is null");
                 }
                 GUI.enabled = true;
                 GUILayout.Label(" " + mod.displayName);
