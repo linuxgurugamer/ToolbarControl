@@ -268,14 +268,14 @@ namespace ToolbarControl_NS
             ApplicationLauncher.AppScenes visibleInScenes, string nameSpace, string toolbarId, string largeToolbarIconActive, string largeToolbarIconInactive, string smallToolbarIconActive, string smallToolbarIconInactive, string toolTip = null)
 
         {
-            Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "AddToAlltoolbars main, nameSpace: " + nameSpace + ",  toolbarId: " + toolbarId +
-                ",  largeToolbarIconActive: " + largeToolbarIconActive + ", largeToolbarIconInactive: " + largeToolbarIconInactive +
-                ", smallToolbarIconActive: " + smallToolbarIconActive + ", smallToolbarIconInactive: " + smallToolbarIconInactive
-                );
-            if (toolTip == null)
-                Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "toolTip is null");
-            else
-                Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "toolTip: " + toolTip);
+            //Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "AddToAlltoolbars main, nameSpace: " + nameSpace + ",  toolbarId: " + toolbarId +
+            //    ",  largeToolbarIconActive: " + largeToolbarIconActive + ", largeToolbarIconInactive: " + largeToolbarIconInactive +
+            //    ", smallToolbarIconActive: " + smallToolbarIconActive + ", smallToolbarIconInactive: " + smallToolbarIconInactive
+            //    );
+            //if (toolTip == null)
+            //    Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "toolTip is null");
+            //else
+            //    Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "toolTip: " + toolTip);
             this.onTrue = onTrue;
             this.onFalse = onFalse;
             this.onHover = onHover;
@@ -303,8 +303,8 @@ namespace ToolbarControl_NS
                 registeredMods[nameSpace].modToolbarControl = this;
                 UseButtons(nameSpace);
             }
-            else
-                Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Missing namespace: " + nameSpace);
+            //else
+            //    Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Missing namespace: " + nameSpace);
         }
 
         string lastLarge = "";
@@ -466,7 +466,7 @@ namespace ToolbarControl_NS
 
             if (this.blizzyButton == null && this.blizzyActive)
             {
-                Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Adding blizzyButton, nameSpace: " + nameSpace + ", toolbarId: " + toolbarId + ", ToolTip: " + ToolTip);
+                //Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Adding blizzyButton, nameSpace: " + nameSpace + ", toolbarId: " + toolbarId + ", ToolTip: " + ToolTip);
                 this.blizzyButton = ToolbarManager.Instance.add(nameSpace, toolbarId);
                 this.blizzyButton.ToolTip = ToolTip;
                 this.blizzyButton.OnClick += this.button_Click;
@@ -663,7 +663,7 @@ namespace ToolbarControl_NS
                 }
                 else
                 {
-                    Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Cannot find texture to load from file:" + fileNamePath);
+                    //Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Cannot find texture to load from file:" + fileNamePath);
                 }
             }
             catch (Exception ex)
@@ -698,7 +698,7 @@ namespace ToolbarControl_NS
 
         Texture2D GetTexture(string path, bool b)
         {
-            Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
+            //Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
 
             Texture2D tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
 

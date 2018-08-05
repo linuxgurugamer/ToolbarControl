@@ -122,10 +122,10 @@ namespace ToolbarControl_NS
         {
             LoadData();
             Mod mod = null;
-            Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
+            //Log.Info("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
             if (registeredMods.ContainsKey(NameSpace))
             {
-                Log.Info("RegisterMod, found, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
+                //Log.Info("RegisterMod, found, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
                 if (DisplayName != "")
                     registeredMods[NameSpace].displayName = DisplayName;
 
@@ -140,7 +140,7 @@ namespace ToolbarControl_NS
                 {
                     if (DisplayName == "")
                         DisplayName = NameSpace;
-                    Log.Info("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
+                    //Log.Info("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);
                     mod = new Mod(NameSpace, DisplayName, useBlizzy, useStock, NoneAllowed);
                     registeredMods.Add(NameSpace, mod);
 
