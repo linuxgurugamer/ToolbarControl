@@ -17,8 +17,8 @@ namespace ToolbarControl_NS
         public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
         public override string Section { get { return "Toolbar Control"; } }
         public override string DisplaySection { get { return "Toolbar Control"; } }
-        public override int SectionOrder { get { return 2; } }
-        public override bool HasPresets { get { return true; } }
+        public override int SectionOrder { get { return 1; } }
+        public override bool HasPresets { get { return false; } }
 
 
         [GameParameters.CustomParameterUI("Show tooltips for stock & Blizzy toolbar",
@@ -33,7 +33,8 @@ namespace ToolbarControl_NS
                     toolTip = "Writes extra data to the log file")]
         public bool debugMode = false;
 
-
+        public bool oldDebugMode = false;
+        bool loaded = false;
 
         public override void SetDifficultyPreset(GameParameters.Preset preset)
         {
@@ -41,11 +42,23 @@ namespace ToolbarControl_NS
 
         public override bool Enabled(MemberInfo member, GameParameters parameters)
         {
+            if (oldDebugMode != debugMode)
+            {
+                ConfigInfo.Instance.SaveData();
+                oldDebugMode = debugMode;
+            }
             return true;
         }
 
         public override bool Interactible(MemberInfo member, GameParameters parameters)
         {
+            if (!loaded)
+            {
+                ConfigInfo.Instance.LoadData();
+                debugMode = ConfigInfo.debugMode;
+                oldDebugMode = debugMode;
+                loaded = true;
+            }
             return true;
         }
 
@@ -54,5 +67,4 @@ namespace ToolbarControl_NS
             return null;
         }
     }
-
 }

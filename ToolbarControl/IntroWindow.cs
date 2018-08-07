@@ -74,7 +74,7 @@ namespace ToolbarControl_NS
 
         private bool Load(string fileName)
         {
-            //Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Load, fileName: " + fileName);
+            Log.Debug(ConfigInfo.debugMode, "Load, fileName: " + fileName);
             // Handle any problems that might arise when reading the text
             try
             {
@@ -121,11 +121,11 @@ namespace ToolbarControl_NS
         bool loaded = false;
         void ProcessLine(string line)
         {
-            //Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "ProcessLine, line: " + line);
+            Log.Debug(ConfigInfo.debugMode, "ProcessLine, line: " + line);
             if (line.Length >= 7 && line.Substring(0, 7) == "<IMAGE=")
             {
                 string s = line.Substring(7, line.Length - 8);
-                //Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "Process line, image: " + s);
+                Log.Debug(ConfigInfo.debugMode, "Process line, image: " + s);
                 Texture2D image = new Texture2D(2, 2, TextureFormat.ARGB32, false);
                 if (ToolbarControl.LoadImageFromFile(ref image, KSPUtil.ApplicationRootPath + "GameData/" + s))
                 {

@@ -1,3 +1,6 @@
+0.1.6.13
+	Reimplemented the Log.Debug, using a local file to store the debug value
+
 0.1.6.12
 	Commented out all Log.Debug lines because they were using the settings class which isn't instantiated in the beginning.  Was causing nullrefs 
 

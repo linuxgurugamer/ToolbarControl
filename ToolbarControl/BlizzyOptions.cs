@@ -7,16 +7,6 @@ using System.Linq;
 namespace ToolbarControl_NS
 {
     [KSPAddon(KSPAddon.Startup.MainMenu, true)]
-    public class RegisterToolbarBlizzyOptions : MonoBehaviour
-    {
-
-        void Start()
-        {
-            ToolbarControl.RegisterMod(BlizzyOptions.MODID, BlizzyOptions.MODNAME, false, true, false);
-        }
-    }
-
-    [KSPAddon(KSPAddon.Startup.MainMenu, true)]
     public class BlizzyOptions : MonoBehaviour
     {
         internal const string MODID = "ToolbarController_NS";
@@ -207,8 +197,8 @@ namespace ToolbarControl_NS
                     ToolbarControl.SaveData();
                     if (ToolbarControl.registeredMods[mod.modId].modToolbarControl != null)
                         ToolbarControl.registeredMods[mod.modId].modToolbarControl.UseButtons(mod.modId);
-                    //else
-                    //    Log.Debug(HighLogic.CurrentGame.Parameters.CustomParams<TC>().debugMode, "mod.Key: " + mod.modId + " modToolbarControl is null");
+                    else
+                        Log.Debug(ConfigInfo.debugMode, "mod.Key: " + mod.modId + " modToolbarControl is null");
                 }
                 GUI.enabled = true;
                 GUILayout.Label(" " + mod.displayName);
