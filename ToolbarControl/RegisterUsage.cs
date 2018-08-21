@@ -72,7 +72,6 @@ namespace ToolbarControl_NS
 
         internal static void LoadData()
         {
-            Log.Info("LoadData");
             if (initted)
                 return;
             if (File.Exists(ConfigFile))
@@ -120,6 +119,10 @@ namespace ToolbarControl_NS
 
         public static bool RegisterMod(string NameSpace, string DisplayName = "", bool useBlizzy = false, bool useStock = true, bool NoneAllowed = true)
         {
+            if (BlizzyOptions.startupCompleted)
+            {
+                Log.Error("WARNING: RegisterMod, LoadedScene: " + HighLogic.LoadedScene + ", called too late for: " + NameSpace + ", " + DisplayName + ", button may not be registered properly");
+            }
             LoadData();
             Mod mod = null;
             //Log.Info("RegisterMod, NameSpace: " + NameSpace + ", DisplayName: " + DisplayName);

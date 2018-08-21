@@ -1,3 +1,7 @@
+0.1.6.14
+	Fixed timing issue on toolbar registration
+	Added log warning in case RegisterToolbar is called too late
+
 0.1.6.13
 	Reimplemented the Log.Debug, using a local file to store the debug value
 

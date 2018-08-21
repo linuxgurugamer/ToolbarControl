@@ -18,11 +18,12 @@ namespace ToolbarControl_NS
         Rect WindowRect;
         int scrollBarHeight = Math.Min(500, Screen.height - 200);
         Vector2 scrollVector;
-
+        internal static bool startupCompleted = false;
         bool initted = false;
 
         void Start()
-        { 
+        {
+            startupCompleted = true;
 #if false
             if (ToolbarControl.registeredMods.Count == 1)
                 Destroy(this);

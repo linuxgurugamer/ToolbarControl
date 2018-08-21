@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ToolbarControl_NS
 {
-    [KSPAddon(KSPAddon.Startup.MainMenu, true)]
+    [KSPAddon(KSPAddon.Startup.Instantly, true)]
     public class RegisterToolbarBlizzyOptions : MonoBehaviour
     {
 
