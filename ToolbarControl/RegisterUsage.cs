@@ -37,15 +37,28 @@ namespace ToolbarControl_NS
 
         //internal static List<Mod> registeredMods = new List<Mod>();
 
-        static string ConfigFile = KSPUtil.ApplicationRootPath + "GameData/001_ToolbarControl/PluginData/ToolbarControl.cfg";
+        static string ConfigFile;
         const string TOOLBARCONTROL = "ToolbarControl";
         const string TOOLBARCONTROLDATA = "ToolbarControlData";
         const string DATA = "DATA";
 
         static bool initted = false;
 
+        private void Awake()
+        {
+            SetConfigFilePath();
+        }
+
+        private static void SetConfigFilePath()
+        {
+            ConfigFile = KSPUtil.ApplicationRootPath + "GameData/001_ToolbarControl/PluginData/ToolbarControl.cfg";
+        }
+
         internal static void SaveData()
         {
+            if (ConfigFile == null)
+                SetConfigFilePath();
+
             ConfigNode node = new ConfigNode(TOOLBARCONTROL);
             ConfigNode data = new ConfigNode(TOOLBARCONTROLDATA);
             data.AddValue("showWindowAtStartup", IntroWindowClass.showIntroAtStartup);
@@ -74,6 +87,10 @@ namespace ToolbarControl_NS
         {
             if (initted)
                 return;
+
+            if (ConfigFile == null)
+                SetConfigFilePath();
+
             if (File.Exists(ConfigFile))
             {
                 ConfigNode tempNode = ConfigNode.Load(ConfigFile);
