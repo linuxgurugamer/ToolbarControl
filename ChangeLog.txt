@@ -1,3 +1,7 @@
+0.1.6.15
+	Thanks to github user @piezpiedpy and @mwerle for this fix to a very subtle problem:
+		Intro window can be blank and the log spammed with errors, doesn't heppen often, mainly in a debug mode
+
 0.1.6.14
 	Fixed timing issue on toolbar registration
 	Added log warning in case RegisterToolbar is called too late
