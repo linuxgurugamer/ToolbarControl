@@ -562,7 +562,7 @@ namespace ToolbarControl_NS
             if (this.stockActive)
             {
                 if (this.stockButton == null && !firstTime)
-                    Log.Debug("stockButton is null, namespace: " + this.nameSpace);
+                    Log.Debug(ConfigInfo.debugMode, "stockButton is null, namespace: " + this.nameSpace);
                 else
                 {
                     if (this.stockButton != null)
