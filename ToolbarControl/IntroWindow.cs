@@ -15,17 +15,25 @@ namespace ToolbarControl_NS
         internal static GUIStyle windowStyle = null;
 
         Rect introWindow;
-        int introWindowId = GUIUtility.GetControlID(FocusType.Passive);
+        int introWindowId;
         int MAIN_WIDTH = Screen.height * 3 / 4;
         int MAIN_HEIGHT = 400;
         internal static int automoved = 0;
 
         GUIStyle areaStyle;
 
+        private void Awake()
+        {
+            introWindowId = GUIUtility.GetControlID(FocusType.Passive);
+            DontDestroyOnLoad(this);
+        }
+
         private void Start()
         {
+#if false
             if (ToolbarControl.registeredMods.Count == 1)
                 Destroy(this);
+#endif
 
             MAIN_WIDTH = Screen.width / 2;
             MAIN_HEIGHT = Screen.height * 3 / 4;
@@ -35,7 +43,6 @@ namespace ToolbarControl_NS
             areaStyle.richText = true;
             ToolbarControl.LoadData();
             showHelp = showIntroAtStartup;
-            DontDestroyOnLoad(this);
         }
 
         public void OnGUI()

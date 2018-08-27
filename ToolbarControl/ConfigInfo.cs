@@ -13,15 +13,20 @@ namespace ToolbarControl_NS
     {
         public static ConfigInfo Instance;
         const string SETTINGSNAME = "ToolbarController";
-        static string PLUGINDATA = KSPUtil.ApplicationRootPath + "GameData/001_ToolbarControl/PluginData/Debug.cfg";
+        static string PLUGINDATA;
 
         static public bool debugMode = false;
 
-        void Start()
+        private void Awake()
         {
             Instance = this;
-            LoadData();
+            PLUGINDATA = KSPUtil.ApplicationRootPath + "GameData/001_ToolbarControl/PluginData/Debug.cfg";
             DontDestroyOnLoad(this);
+        }
+
+        private void Start()
+        {
+            LoadData();
         }
 
         public void SaveData()
