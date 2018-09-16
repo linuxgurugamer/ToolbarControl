@@ -1036,7 +1036,7 @@ namespace ToolbarControl_NS
                 return;
             doSetFalse = false;
 
-            if (stockActive)
+            if (stockButton != null && stockActive)
             {
                 stockButton.SetFalse(makeCall);
                 makeCall = false;
