@@ -658,7 +658,7 @@ namespace ToolbarControl_NS
                     }
                     catch (Exception ex)
                     {
-                        Log.Error("Failed to load the texture:" + path);
+                        Log.Error("Failed to load the texture: " + path);
                         Log.Error(ex.Message);
                     }
                 }
