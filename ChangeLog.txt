@@ -1,3 +1,7 @@
+0.1.6.19
+	Fixed URL in .version file
+	Corrected text in intro 
+	
 0.1.6.18
 	Version bump to fix .version file
 
