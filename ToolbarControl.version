@@ -1,6 +1,6 @@
 {
     "NAME"     : "ToolbarControl",
-    "URL"      : "https://raw.githubusercontent.com/linuxgurugamer/ToolbarControl/master/ToolbarControl.version",
+    "URL"      : "http://ksp.spacetux.net/avc/ToolbarControl",
     "DOWNLOAD" : "https://github.com/linuxgurugamer/ToolbarControl/releases",
     "GITHUB" :
     {
@@ -12,7 +12,7 @@
         "MAJOR" : 0,
         "MINOR" : 1,
         "PATCH" : 6,
-        "BUILD" : 18
+        "BUILD" : 19
     },
 	"KSP_VERSION": 
 	{
