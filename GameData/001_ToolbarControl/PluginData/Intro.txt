@@ -4,7 +4,7 @@ KSP has a stock toolbar, located either along the bottom or side of the screen, 
 
 There is another toolbar available as a mod, commonly referred to as the Blizzy Toolbar; called this because the original author was known as blizzy78.
 
-The button for the Toolbar Controller will only be available in the SpaceCenter scene.  The button looks like this, and can appear in either toolbar:
+The button for the Toolbar Controller will be available in all scenes.  The button looks like this, and can appear in either toolbar:
 
 <IMAGE=001_ToolbarControl/PluginData/Textures/toolbar_38.png>
 
