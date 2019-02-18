@@ -1,3 +1,6 @@
+0.1.6.20
+	Removed KSP_VERSION_MAX
+
 0.1.6.19
 	Fixed URL in .version file
 	Corrected text in intro 
