@@ -1,3 +1,11 @@
+0.1.7
+	Added dependency unBlur
+	Added dependency checks for unblur, clickthroughblocker
+	
+	Replaced code which needless read the disk often with the unBlur clode to both fix blurring 
+		and needless reading of the disk
+	Moved Textures directory out of the PluginData
+
 0.1.6.20
 	Removed KSP_VERSION_MAX
 

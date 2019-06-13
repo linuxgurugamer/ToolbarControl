@@ -48,8 +48,8 @@ namespace ToolbarControl_NS
                 ApplicationLauncher.AppScenes.TRACKSTATION,
                 MODID,
                 "toolbarControllerButton",
-                "001_ToolbarControl/PluginData/Textures/toolbar_38",
-                "001_ToolbarControl/PluginData/Textures/toolbar_24",
+                "001_ToolbarControl/Textures/toolbar_38",
+                "001_ToolbarControl/Textures/toolbar_24",
                 MODNAME
             );
         }

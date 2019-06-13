@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using KSP.UI;
 using KSP.UI.Screens;
-using DDSHeaders;
+
 
 namespace ToolbarControl_NS
 {
@@ -597,6 +597,7 @@ namespace ToolbarControl_NS
         // easier to specify different cases than to change case to lower.  This will fail on MacOS and Linux
         // if a suffix has mixed case
         static string[] imgSuffixes = new string[] { ".png", ".jpg", ".gif", ".PNG", ".JPG", ".GIF", ".dds", ".DDS" };
+#if false
         public static Boolean LoadImageFromFile(ref Texture2D tex, String fileNamePath)
         {
 
@@ -674,6 +675,75 @@ namespace ToolbarControl_NS
             }
             return blnReturn;
         }
+#else
+        public static Boolean LoadImageFromFile(ref Texture2D tex, String fileNamePath)
+        {
+            Texture2D tx;
+            bool rc = LoadImageFromFile(out tx, fileNamePath);
+            tex = tx;
+            return rc;
+        }
+        static internal Boolean LoadImageFromFile(out Texture2D tex, String fileNamePath, bool b = true)
+        {
+
+            Boolean blnReturn = false;
+            tex = null;
+            bool dds = false;
+            try
+            {
+                string path = fileNamePath;
+                if (!System.IO.File.Exists(fileNamePath))
+                {
+                    // Look for the file with an appended suffix.
+                    for (int i = 0; i < imgSuffixes.Length; i++)
+
+                        if (System.IO.File.Exists(fileNamePath + imgSuffixes[i]))
+                        {
+                            path = fileNamePath + imgSuffixes[i];
+                            dds = imgSuffixes[i] == ".dds" || imgSuffixes[i] == ".DDS";
+                            break;
+                        }
+                }
+
+                //File Exists check
+                if (System.IO.File.Exists(path))
+                {
+                    try
+                    {
+                        if (dds)
+                        {
+                            tex = UnBlur.UnBlur.LoadDDS(path, false);
+                            if (tex == null)
+                                throw new Exception("LoadDDS failed.");
+                        }
+                        else
+                        {
+                            tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
+                            tex.LoadImage(System.IO.File.ReadAllBytes(path));
+                        }
+                        blnReturn = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Failed to load the texture:" + path);
+                        Log.Error(ex.Message);
+                    }
+                }
+                else
+                {
+                    Log.Error("Cannot find texture to load:" + fileNamePath);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Failed to load (are you missing a file):" + fileNamePath);
+                Log.Error(ex.Message);
+            }
+            return blnReturn;
+        }
+#endif
         public static Texture2D LoadTextureDXT(byte[] ddsBytes, TextureFormat textureFormat)
         {
             if (textureFormat != TextureFormat.DXT1 && textureFormat != TextureFormat.DXT5)
@@ -696,7 +766,7 @@ namespace ToolbarControl_NS
 
             return (texture);
         }
-
+#if false
         Texture2D GetTexture(string path, bool b)
         {
             Log.Debug(ConfigInfo.debugMode, "GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
@@ -718,6 +788,25 @@ namespace ToolbarControl_NS
   
             return null;
         }
+#else
+        internal static string TexPathname(string path)
+        {
+            string s = KSPUtil.ApplicationRootPath + "GameData/" + path;
+            Log.Info("TexPathname: " + s);
+            return s;
+        }
+        Texture2D GetTexture(string path, bool asNormalMap)
+        {
+            // ask unBlur to look for the texture in GameDatabase, remove mipmaps if necessary, and return it
+            Texture2D tex = UnBlur.UnBlur.Instance?.GetTexture(path, asNormalMap);
+            if (tex != null) return tex;
+
+            // texture not found in GameDatabase
+            LoadImageFromFile(out tex, TexPathname(path));
+            return tex;
+        }
+#endif
+
         private void OnGUIAppLauncherReady()
         {
             if (destroyed)
