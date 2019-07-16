@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
 using KSP.UI;
@@ -293,7 +294,7 @@ namespace ToolbarControl_NS
             this.StockToolbarIconInactive = largeToolbarIconInactive;
             try
             {
-                if (HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)                
+                if (HighLogic.CurrentGame.Parameters.CustomParams<TC>().showStockTooltips)
                     this.ToolTip = toolTip;
             }
             catch { }
@@ -322,8 +323,9 @@ namespace ToolbarControl_NS
             lastSmall = small;
             if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
-               
                 blizzyButton.TexturePath = small;
+                try { blizzyButton.BigTexturePath = large; }
+                catch { Log.Error("****** Blizzy toolbar needs updating ******"); }
             }
             if (stockActive)
             {
@@ -362,7 +364,7 @@ namespace ToolbarControl_NS
 
         public Rect? BlizzyPosition
         {
-            get { return null;  }
+            get { return null; }
         }
 
         public void DisableMutuallyExclusive()
@@ -451,7 +453,7 @@ namespace ToolbarControl_NS
             }
         }
 
-#region SetButtonSettings
+        #region SetButtonSettings
         private void SetBlizzySettings()
         {
             if (!ToolbarManager.ToolbarAvailable)
@@ -519,7 +521,7 @@ namespace ToolbarControl_NS
             }
             this.UpdateToolbarIcon(true);
         }
-#endregion
+        #endregion
 
         private void StartAfterInit()
         {
@@ -554,9 +556,17 @@ namespace ToolbarControl_NS
             if (ToolbarManager.ToolbarAvailable && this.blizzyActive && this.blizzyButton != null)
             {
                 if (this.lastSmall != "")
+                {
                     this.blizzyButton.TexturePath = lastSmall;
+                    try { this.blizzyButton.BigTexturePath = lastLarge; }
+                    catch { Log.Error("****** Blizzy toolbar needs updating ******"); }
+                }
                 else
+                {
                     this.blizzyButton.TexturePath = this.buttonActive ? this.BlizzyToolbarIconActive : this.BlizzyToolbarIconInactive;
+                    try { this.blizzyButton.BigTexturePath = this.buttonActive ? this.StockToolbarIconActive : this.StockToolbarIconInactive; }
+                    catch { Log.Error("****** Blizzy toolbar needs updating ******"); }
+                }
             }
             //else
             if (this.stockActive)
@@ -683,6 +693,11 @@ namespace ToolbarControl_NS
             tex = tx;
             return rc;
         }
+
+        static internal Texture2D LoadDDSViaUnBlur(string path)
+        {
+            return UnBlur.UnBlur.LoadDDS(path, false);
+        }
         static internal Boolean LoadImageFromFile(out Texture2D tex, String fileNamePath, bool b = true)
         {
 
@@ -708,13 +723,23 @@ namespace ToolbarControl_NS
                 //File Exists check
                 if (System.IO.File.Exists(path))
                 {
+
                     try
                     {
-                        if (dds)
+
+                        if (RegisterToolbarBlizzyOptions.unBlurPresent)
                         {
-                            tex = UnBlur.UnBlur.LoadDDS(path, false);
-                            if (tex == null)
-                                throw new Exception("LoadDDS failed.");
+                            if (dds)
+                            {
+                                tex = LoadDDSViaUnBlur(path);
+                                if (tex == null)
+                                    throw new Exception("LoadDDS failed.");
+                            }
+                            else
+                            {
+                                tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
+                                tex.LoadImage(System.IO.File.ReadAllBytes(path));
+                            }
                         }
                         else
                         {
@@ -728,6 +753,7 @@ namespace ToolbarControl_NS
                         Log.Error("Failed to load the texture:" + path);
                         Log.Error(ex.Message);
                     }
+
                 }
                 else
                 {
@@ -795,12 +821,24 @@ namespace ToolbarControl_NS
             Log.Info("TexPathname: " + s);
             return s;
         }
-        Texture2D GetTexture(string path, bool asNormalMap)
+
+        Texture2D GetTextureViaUnBlur(string path, bool asNormalMap)
         {
             // ask unBlur to look for the texture in GameDatabase, remove mipmaps if necessary, and return it
             Texture2D tex = UnBlur.UnBlur.Instance?.GetTexture(path, asNormalMap);
-            if (tex != null) return tex;
+            return tex;
+        }
 
+        Texture2D GetTexture(string path, bool asNormalMap)
+        {
+            Texture2D tex;
+            if (RegisterToolbarBlizzyOptions.unBlurPresent)
+            {
+                // ask unBlur to look for the texture in GameDatabase, remove mipmaps if necessary, and return it
+                tex = GetTextureViaUnBlur(path, asNormalMap);
+                if (tex != null) return tex;
+            }
+   
             // texture not found in GameDatabase
             LoadImageFromFile(out tex, TexPathname(path));
             return tex;
@@ -890,7 +928,7 @@ namespace ToolbarControl_NS
             }
         }
 
-#region ActiveInactive
+        #region ActiveInactive
         void SetButtonActive()
         {
             this.buttonActive = true;
@@ -920,14 +958,14 @@ namespace ToolbarControl_NS
                 SetButtonInactive();
             }
         }
-#endregion
+        #endregion
 
         private void OnGUIAppLauncherDestroyed()
         {
             RemoveStockButton();
         }
 
-#region tooltip
+        #region tooltip
         bool drawTooltip = false;
         float starttimeToolTipShown = 0;
         Vector2 tooltipSize;
@@ -996,7 +1034,7 @@ namespace ToolbarControl_NS
                 GUI.Label(tooltipRect, ToolTip, HighLogic.Skin.label);
             }
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// Checks whether the given stock button was created by this mod.
@@ -1027,7 +1065,7 @@ namespace ToolbarControl_NS
             }
             return false;
         }
-  
+
 
         /// <summary>
         /// Checks whether the given stock button was created by this mod.
@@ -1091,7 +1129,11 @@ namespace ToolbarControl_NS
             if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
                 if (blizzyButton != null)
+                {
                     blizzyButton.TexturePath = BlizzyToolbarIconActive;
+                    try { blizzyButton.BigTexturePath = StockToolbarIconActive; }
+                    catch { Log.Error("****** Blizzy toolbar needs updating ******"); }
+                }
                 else
                     Log.Error("SetTrue called before blizzyButton is initialized");
 
@@ -1134,6 +1176,8 @@ namespace ToolbarControl_NS
             if (ToolbarManager.ToolbarAvailable && blizzyActive)
             {
                 blizzyButton.TexturePath = BlizzyToolbarIconInactive;
+                try { blizzyButton.BigTexturePath = StockToolbarIconInactive; }
+                catch { Log.Error("****** Blizzy toolbar needs updating ******"); }
                 if (onFalse != null && makeCall)
                     onFalse();
             }

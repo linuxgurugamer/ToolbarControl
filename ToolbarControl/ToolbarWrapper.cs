@@ -34,17 +34,18 @@ namespace ToolbarControl_NS
 {
 
 
+
     /**********************************************************\
-    *          --- DO NOT EDIT BELOW THIS COMMENT ---          *
-    *                                                          *
-    * This file contains classes and interfaces to use the     *
-    * Toolbar Plugin without creating a hard dependency on it. *
-    *                                                          *
-    * There is nothing in this file that needs to be edited    *
-    * by hand.                                                 *
-    *                                                          *
-    *          --- DO NOT EDIT BELOW THIS COMMENT ---          *
-    \**********************************************************/
+	*          --- DO NOT EDIT BELOW THIS COMMENT ---          *
+	*                                                          *
+	* This file contains classes and interfaces to use the     *
+	* Toolbar Plugin without creating a hard dependency on it. *
+	*                                                          *
+	* There is nothing in this file that needs to be edited    *
+	* by hand.                                                 *
+	*                                                          *
+	*          --- DO NOT EDIT BELOW THIS COMMENT ---          *
+	\**********************************************************/
 
 
 
@@ -165,7 +166,11 @@ namespace ToolbarControl_NS
             set;
             get;
         }
-
+        string BigTexturePath
+        {
+            set;
+            get;
+        }
         /// <summary>
         /// The button's tool tip text. Set to null if no tool tip is desired.
         /// </summary>
@@ -631,6 +636,17 @@ namespace ToolbarControl_NS
                 return (string)types.button.texturePathProperty.GetValue(realButton, null);
             }
         }
+        public string BigTexturePath
+        {
+            set
+            {
+                types.button.bigTexturePathProperty.SetValue(realButton, value, null);
+            }
+            get
+            {
+                return (string)types.button.bigTexturePathProperty.GetValue(realButton, null);
+            }
+        }
 
         public string ToolTip
         {
@@ -835,8 +851,7 @@ namespace ToolbarControl_NS
         internal static Type getType(string name)
         {
             Type type = null;
-            AssemblyLoader.loadedAssemblies.TypeOperation(t =>
-            {
+            AssemblyLoader.loadedAssemblies.TypeOperation(t => {
                 if (t.FullName == name)
                 {
                     type = t;
@@ -872,6 +887,7 @@ namespace ToolbarControl_NS
         internal readonly PropertyInfo textProperty;
         internal readonly PropertyInfo textColorProperty;
         internal readonly PropertyInfo texturePathProperty;
+        internal readonly PropertyInfo bigTexturePathProperty;
         internal readonly PropertyInfo toolTipProperty;
         internal readonly PropertyInfo visibleProperty;
         internal readonly PropertyInfo visibilityProperty;
@@ -892,6 +908,7 @@ namespace ToolbarControl_NS
             textProperty = ToolbarTypes.getProperty(iButtonType, "Text");
             textColorProperty = ToolbarTypes.getProperty(iButtonType, "TextColor");
             texturePathProperty = ToolbarTypes.getProperty(iButtonType, "TexturePath");
+            bigTexturePathProperty = ToolbarTypes.getProperty(iButtonType, "BigTexturePath");
             toolTipProperty = ToolbarTypes.getProperty(iButtonType, "ToolTip");
             visibleProperty = ToolbarTypes.getProperty(iButtonType, "Visible");
             visibilityProperty = ToolbarTypes.getProperty(iButtonType, "Visibility");

@@ -1,3 +1,11 @@
+0.1.8
+	Updated to add large icon to the toolbar.BigTexturePath (new in toolbar 1.7.20)
+	Added InstallChecker
+	Updated AssemblyVersion.tt
+	Changed the message about:  WARNING: RegisterMod to only show when debugmode is true
+	Removed the unBlur mod as a hard dependency.  It will use UnBlur if it's there, otherwise will fall back to reading the file
+	Removed dependency check for unBlur
+
 0.1.7
 	Added dependency unBlur
 	Added dependency checks for unblur, clickthroughblocker

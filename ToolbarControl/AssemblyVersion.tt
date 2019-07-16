@@ -27,10 +27,13 @@
 	int i2 = 0;
 	string s;
 	
+	// For Visual Studio / MSBuild Build-Time Template Resolution
+	string RootDirectory = System.IO.Path.GetDirectoryName(Host.TemplateFile) + @"\..\";
+
 	//
-	// Update the following with the complete path to the .version file
+	// Update the following with the name of the .version file which is in the root directory
 	//
-	string versionfile =  @"D:\Users\jbb\github\ToolbarControl\ToolbarControl.version";
+	string versionfile = RootDirectory + "ToolbarControl.version";
 
 	if (!File.Exists(versionfile))
 	{

@@ -136,7 +136,7 @@ namespace ToolbarControl_NS
 
         public static bool RegisterMod(string NameSpace, string DisplayName = "", bool useBlizzy = false, bool useStock = true, bool NoneAllowed = true)
         {
-            if (BlizzyOptions.startupCompleted)
+            if (BlizzyOptions.startupCompleted && ConfigInfo.debugMode)
             {
                 Log.Error("WARNING: RegisterMod, LoadedScene: " + HighLogic.LoadedScene + ", called too late for: " + NameSpace + ", " + DisplayName + ", button may not be registered properly");
             }
