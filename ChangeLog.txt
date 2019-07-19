@@ -1,4 +1,4 @@
-0.1.8
+0.1.8.1
 	Updated to add large icon to the toolbar.BigTexturePath (new in toolbar 1.7.20)
 	Added InstallChecker
 	Updated AssemblyVersion.tt

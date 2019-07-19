@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using KSP.UI;
 using KSP.UI.Screens;
-
+using DDSHeaders;
 
 namespace ToolbarControl_NS
 {
@@ -607,7 +607,7 @@ namespace ToolbarControl_NS
         // easier to specify different cases than to change case to lower.  This will fail on MacOS and Linux
         // if a suffix has mixed case
         static string[] imgSuffixes = new string[] { ".png", ".jpg", ".gif", ".PNG", ".JPG", ".GIF", ".dds", ".DDS" };
-#if false
+#if true
         public static Boolean LoadImageFromFile(ref Texture2D tex, String fileNamePath)
         {
 
@@ -670,7 +670,7 @@ namespace ToolbarControl_NS
                     catch (Exception ex)
                     {
                         Log.Error("Failed to load the texture: " + path);
-                        Log.Error(ex.Message);
+                        Log.Error("Error: " + ex.Message);
                     }
                 }
                 else
@@ -831,7 +831,7 @@ namespace ToolbarControl_NS
 
         Texture2D GetTexture(string path, bool asNormalMap)
         {
-            Texture2D tex;
+            Texture2D tex = new Texture2D(16, 16, TextureFormat.ARGB32, false); ;
             if (RegisterToolbarBlizzyOptions.unBlurPresent)
             {
                 // ask unBlur to look for the texture in GameDatabase, remove mipmaps if necessary, and return it
@@ -840,8 +840,21 @@ namespace ToolbarControl_NS
             }
    
             // texture not found in GameDatabase
-            LoadImageFromFile(out tex, TexPathname(path));
-            return tex;
+            //LoadImageFromFile(out tex, TexPathname(path));
+            //return tex;
+
+            if (LoadImageFromFile(ref tex, TexPathname(path)))
+                return tex;
+            if (GameDatabase.Instance.ExistsTexture(path))
+            {
+                tex = GameDatabase.Instance.GetTexture(path, false);
+                return tex;
+            }
+
+
+            Log.Error("Cannot find texture to load:" + path);
+
+            return null;
         }
 #endif
 

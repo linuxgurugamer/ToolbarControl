@@ -128,13 +128,11 @@ namespace ToolbarControl_NS
         bool loaded = false;
         void ProcessLine(string line)
         {
-            Log.Debug(ConfigInfo.debugMode, "ProcessLine, line: " + line);
             if (line.Length >= 7 && line.Substring(0, 7) == "<IMAGE=")
             {
                 string s = line.Substring(7, line.Length - 8);
-                Log.Debug(ConfigInfo.debugMode, "Process line, image: " + s);
-                Texture2D image;
-                if (ToolbarControl.LoadImageFromFile(out image, KSPUtil.ApplicationRootPath + "GameData/" + s))
+                Texture2D image= null;
+                if (ToolbarControl.LoadImageFromFile(ref image, KSPUtil.ApplicationRootPath + "GameData/" + s))
                 {
                     images.Add(image);
                     lines.Add(line);
