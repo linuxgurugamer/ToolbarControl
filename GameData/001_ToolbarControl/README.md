@@ -195,8 +195,8 @@ And in the file where the button is added to the ToolbarController:
 					ApplicationLauncher.AppScenes.FLIGHT | ApplicationLauncher.AppScenes.MAPVIEW | ApplicationLauncher.AppScenes.TRACKSTATION,
 					MODID,
 					"slingShotterButton",
-					"SlingShotter/Textures/icon_38",
-					"SlingShotter/Textures/icon_24",
+					"SlingShotter/PluginData/Textures/icon_38",
+					"SlingShotter/PluginData/Textures/icon_24",
 					MODNAME
 				);
 			}

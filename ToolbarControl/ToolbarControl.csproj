@@ -84,9 +84,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="unBlur.0.4.0">
-      <HintPath>R:\KSP_1.6.1_dev\GameData\unBlur.0.4.0.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>R:\KSP_1.7.2_dev\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
