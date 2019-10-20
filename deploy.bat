@@ -7,7 +7,7 @@ rem GAMEDATA is the name of the local GameData
 rem VERSIONFILE is the name of the version file, usually the same as GAMEDATA,
 rem    but not always
 
-set H=R:\KSP_1.7.2_dev
+set H=%KSPDIR%
 set GAMEDIR=001_ToolbarControl
 set GAMEDATA="GameData\"
 set VERSIONFILE=ToolbarControl.version
