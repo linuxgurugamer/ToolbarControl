@@ -710,7 +710,7 @@ namespace ToolbarControl_NS
 
         Texture2D GetTexture(string path, bool b)
         {
-            Log.Debug(ConfigInfo.debugMode, "GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
+            //Log.Debug(ConfigInfo.debugMode, "GetTexture, path: " + KSPUtil.ApplicationRootPath + "GameData/" + path);
 
             Texture2D tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
 
