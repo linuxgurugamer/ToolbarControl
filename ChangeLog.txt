@@ -1,3 +1,10 @@
+ChangeLog
+
+0.1.9.3
+	Updated MiniAVC.dll to 1.4.0.2 to fix a nasty CTD
+	Some optimization work on related to the stock toolbar code, reduces the number of calls
+		Unity makes every frame
+
 0.1.9.2
 	Removed some log spam
 

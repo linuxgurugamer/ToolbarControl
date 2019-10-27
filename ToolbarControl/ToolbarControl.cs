@@ -737,13 +737,32 @@ namespace ToolbarControl_NS
             // Setup PW Stock Toolbar button
             if (ApplicationLauncher.Ready && stockButton == null)
             {
+                //
+                // The following is done because Unity will be calling
+                // all the functions every frame.  This way if none is defined,
+                // then null is passed and Unity won't do the call
+                //
+                Callback tcOnTrue = null;
+                if (this.onTrue!= null) tcOnTrue = doOnTrue;
+                Callback tcOnFalse = null;
+                if (this.onFalse != null) tcOnFalse = doOnFalse;
+                Callback tcOnHover = null;
+                if (this.onHover != null) tcOnHover = doOnHover;
+                Callback tcOnHoverOut = null;
+                if (this.onHoverOut != null) tcOnHoverOut = doOnHoverOut;
+                Callback tcOnEnable = null;
+                if (this.onEnable != null) tcOnEnable = doOnEnable;
+                Callback tcOnDisable = null;
+                if (this.onDisable != null) tcOnDisable = doOnDisable;
+
+
                 stockButton = ApplicationLauncher.Instance.AddModApplication(
-                    doOnTrue,
-                    doOnFalse,
-                    doOnHover,
-                    doOnHoverOut,
-                    doOnEnable,
-                    doOnDisable,
+                    tcOnTrue,
+                    tcOnFalse,
+                    tcOnHover,
+                    tcOnHoverOut,
+                    tcOnEnable,
+                    tcOnDisable,
                     visibleInScenes,
                     (Texture)GetTexture(StockToolbarIconActive, false));
 
