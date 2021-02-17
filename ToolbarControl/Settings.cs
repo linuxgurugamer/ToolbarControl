@@ -29,12 +29,18 @@ namespace ToolbarControl_NS
                    toolTip = "Time tooltip stays around")]
         public float hoverTimeout = 0.5f;
 
+        [GameParameters.CustomParameterUI("Allow the Toolbar Control button to be hidden",
+                    toolTip = "When hidden, you can't change anything")]
+        public bool allowAllToolbarButtonsHidden = false;
+
+
         [GameParameters.CustomParameterUI("Debug mode",
                     toolTip = "Writes extra data to the log file")]
         public bool debugMode = false;
 
         public bool oldDebugMode = false;
         bool loaded = false;
+
 
         public override void SetDifficultyPreset(GameParameters.Preset preset)
         {

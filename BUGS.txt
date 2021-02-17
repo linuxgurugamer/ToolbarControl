@@ -1,0 +1,2 @@
+Can't have multiple buttons in a single namespace due to only using the Namespace as the only key in registeredMods 
+See the RegisterMod() in RegisterUsage.cs, line 137

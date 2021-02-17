@@ -271,7 +271,8 @@ namespace ToolbarControl_NS
         {
             Log.Debug(ConfigInfo.debugMode, "AddToAlltoolbars main, nameSpace: " + nameSpace + ",  toolbarId: " + toolbarId +
                 ",  largeToolbarIconActive: " + largeToolbarIconActive + ", largeToolbarIconInactive: " + largeToolbarIconInactive +
-                ", smallToolbarIconActive: " + smallToolbarIconActive + ", smallToolbarIconInactive: " + smallToolbarIconInactive
+                ", smallToolbarIconActive: " + smallToolbarIconActive + ", smallToolbarIconInactive: " + smallToolbarIconInactive +
+                ", visibleInScenes: " + (int)visibleInScenes
                 );
             if (toolTip == null)
                 Log.Debug(ConfigInfo.debugMode, "toolTip is null");
@@ -635,7 +636,7 @@ namespace ToolbarControl_NS
                     {
                         if (dds)
                         {
-                            Log.Info("LoadIimageFromFile, dds");
+                            Log.Info("LoadImageFromFile, dds");
                             byte[] bytes = System.IO.File.ReadAllBytes(path);
 
 

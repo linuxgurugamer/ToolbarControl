@@ -1,12 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolbarControl", "ToolbarControl\ToolbarControl.csproj", "{B146B9F2-61CB-4E43-BF7C-8737448116AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F7F33464-5170-431E-A77F-91E05FB3FE23}"
 	ProjectSection(SolutionItems) = preProject
+		BUGS.txt = BUGS.txt
 		buildRelease.bat = buildRelease.bat
 		ChangeLog.txt = ChangeLog.txt
 		deploy.bat = deploy.bat
