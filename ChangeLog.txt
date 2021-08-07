@@ -1,5 +1,8 @@
 ChangeLog
 
+0.1.9.6
+	Reverted DLL name change, too many mods were using the original name
+
 0.1.9.5
 	Renamed DLL for CKAN compatibility
 	Added AssemblyFileVersion
