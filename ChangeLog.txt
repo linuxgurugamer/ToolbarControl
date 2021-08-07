@@ -1,5 +1,10 @@
 ChangeLog
 
+0.1.9.5
+	Renamed DLL for CKAN compatibility
+	Added AssemblyFileVersion
+	Updated version file for 1.12
+
 0.1.9.4
 	Really did the MiniAVC update
 
