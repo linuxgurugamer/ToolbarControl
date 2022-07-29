@@ -1,5 +1,8 @@
 ChangeLog
 
+0.1.9.7
+	Added ability to hide button even when Blizzy toolbar is not installed
+
 0.1.9.6
 	Reverted DLL name change, too many mods were using the original name
 

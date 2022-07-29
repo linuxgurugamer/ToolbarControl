@@ -120,7 +120,7 @@ namespace ToolbarControl_NS
         public void UseStock(bool useStock)
         {
 
-            if (!ToolbarManager.ToolbarAvailable || useStock)
+            if (/* !ToolbarManager.ToolbarAvailable || */ useStock)
             {
                 if (!stockActive)
                 {
