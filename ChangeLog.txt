@@ -1,5 +1,8 @@
 ChangeLog
 
+0.1.9.8
+	Reverted disabling the KSPAssembly number (had to modify build server to support this)
+
 0.1.9.7
 	Added ability to hide button even when Blizzy toolbar is not installed
 
