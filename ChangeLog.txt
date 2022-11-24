@@ -1,5 +1,8 @@
 ChangeLog
 
+0.1.9.9
+	Release to get AssemblyFileVersion set properly, no functional change
+
 0.1.9.8
 	Reverted disabling the KSPAssembly number (had to modify build server to support this)
 
