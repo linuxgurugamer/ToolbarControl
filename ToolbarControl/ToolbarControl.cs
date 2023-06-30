@@ -612,6 +612,10 @@ namespace ToolbarControl_NS
         {
 
             Boolean blnReturn = false;
+            if (tex == null)
+            {
+                tex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
+            }
             bool dds = false;
             try
             {
