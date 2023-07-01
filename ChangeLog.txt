@@ -1,6 +1,9 @@
 ChangeLog
 
-0.1.9.10 (unreleased)
+1.9.10.11
+	Updated internal assembly number, needed for new mod
+
+0.1.9.10 
 	Added check for null image var when loading from file, if null, allocates a small texture first
 
 0.1.9.9
