@@ -459,8 +459,11 @@ namespace ToolbarControl_NS
         {
             if (!ToolbarManager.ToolbarAvailable)
             {
-                this.stockActive = true;
-                SetStockSettings();
+                if (this.blizzyActive)
+                {
+                    this.stockActive = true;
+                    SetStockSettings();
+                }
                 return;
             }
             if (!this.stockActive)
