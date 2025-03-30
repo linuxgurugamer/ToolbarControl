@@ -9,8 +9,6 @@ rem    but not always
 
 set H=%KSPDIR%
 
-set H=R:\KSP_1.12.5-wasd
-
 set GAMEDIR=001_ToolbarControl
 set GAMEDATA="GameData"
 set VERSIONFILE=ToolbarControl.version
