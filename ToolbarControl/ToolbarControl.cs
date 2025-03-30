@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
-using System.Collections.Generic;
+﻿using DDSHeaders;
 using KSP.UI;
 using KSP.UI.Screens;
-using DDSHeaders;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ToolbarControl_NS
 {
@@ -321,12 +320,15 @@ namespace ToolbarControl_NS
                 UpdateToolbarIcon();
                 return;
             }
-            lastSmall = small;
-            if (ToolbarManager.ToolbarAvailable && blizzyActive)
+            if (lastSmall != small)
             {
-                blizzyButton.TexturePath = small;
-                try { blizzyButton.BigTexturePath = large; }
-                catch { Log.Error("****** Blizzy toolbar needs updating ******"); }
+                lastSmall = small;
+                if (ToolbarManager.ToolbarAvailable && blizzyActive)
+                {
+                    blizzyButton.TexturePath = small;
+                    try { blizzyButton.BigTexturePath = large; }
+                    catch { Log.Error("****** Blizzy toolbar needs updating ******"); }
+                }
             }
             if (stockActive)
             {
@@ -729,9 +731,9 @@ namespace ToolbarControl_NS
                 return tex;
             }
 
-     
+
             Log.Error("Cannot find texture to load:" + path);
-  
+
             return null;
         }
 
@@ -748,7 +750,7 @@ namespace ToolbarControl_NS
                 // then null is passed and Unity won't do the call
                 //
                 Callback tcOnTrue = null;
-                if (this.onTrue!= null) tcOnTrue = doOnTrue;
+                if (this.onTrue != null) tcOnTrue = doOnTrue;
                 Callback tcOnFalse = null;
                 if (this.onFalse != null) tcOnFalse = doOnFalse;
                 Callback tcOnHover = null;
