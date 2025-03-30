@@ -1,6 +1,6 @@
 {
   "NAME": "ToolbarControl",
-  "URL": "https://raw.githubusercontent.com/linuxgurugamer/ksp_toolbar/refs/heads/master/Toolbar.version",
+  "URL": "https://raw.githubusercontent.com/linuxgurugamer/ToolbarControl/refs/heads/master/ToolbarControl.version",
   "DOWNLOAD": "https://github.com/linuxgurugamer/ToolbarControl/releases",
   "GITHUB": {
     "USERNAME": "linuxgurugamer",
@@ -10,7 +10,7 @@
     "MAJOR": 0,
     "MINOR": 1,
     "PATCH": 9,
-    "BUILD": 12
+    "BUILD": 13
   },
   "KSP_VERSION": {
     "MAJOR": 1,

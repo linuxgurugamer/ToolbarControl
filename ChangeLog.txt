@@ -1,5 +1,8 @@
 ChangeLog
 
+0.1.9.13
+	Fixed wrong URL in version file
+
 0.1.9.12
 	Fixed bug where memory was continually used when icons were being updated every frame on the Blizzy toolbar, even if no change had been made
 	Updated version file to use github for version info
