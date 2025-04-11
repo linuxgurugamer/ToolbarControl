@@ -114,7 +114,7 @@ namespace ToolbarControl_NS
             GUILayout.Label("For each mod, select which toolbar to put it's button on.");
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-            GUILayout.Label("If the Blizzy toobar is not installed, all buttons will be put on the stock toolbar, regardless of the setting");
+            GUILayout.Label("If the Blizzy toolbar is not installed, all buttons will be put on the stock toolbar, regardless of the setting");
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
