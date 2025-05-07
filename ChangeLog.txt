@@ -1,5 +1,9 @@
 ChangeLog
 
+0.1.9.14
+	Thanks to github user @averageksp for this:
+		Fix Spelling Error (Blizzy toobar is  now Blizzy toolbar)
+
 0.1.9.13
 	Fixed wrong URL in version file
 
