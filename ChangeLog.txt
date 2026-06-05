@@ -1,5 +1,8 @@
 ChangeLog
 
+0.1.9.15 (unreleased)
+	Fixed typo in tooltip for the Blizzy toolbar setting
+
 0.1.9.14
 	Thanks to github user @averageksp for this:
 		Fix Spelling Error (Blizzy toobar is  now Blizzy toolbar)

@@ -22,7 +22,7 @@ namespace ToolbarControl_NS
 
 
         [GameParameters.CustomParameterUI("Show tooltips for stock & Blizzy toolbar",
-            toolTip ="Blzzy tooltip setting may need to restart SKP")]
+            toolTip ="Blizzy tooltip setting may need to restart SKP")]
         public bool showStockTooltips = true;
 
         [GameParameters.CustomFloatParameterUI("Tooltip timeout", minValue = 0.5f, maxValue = 5.0f, asPercentage = false, displayFormat = "0.0",
