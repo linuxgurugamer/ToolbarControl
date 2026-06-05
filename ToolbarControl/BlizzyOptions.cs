@@ -180,7 +180,7 @@ namespace ToolbarControl_NS
 
                     doUseButtons = true;
                 }
-                if (!ToolbarControl.registeredMods[mod.modId].noneAllowed)
+                if (!ToolbarControl.registeredMods[mod.modId].noneAllowed && !HighLogic.CurrentGame.Parameters.CustomParams<TC>().allowAllToolbarButtonsHidden)
                     GUI.enabled = false;
                 bool none = (!stock & !blizzy);
                 bool newnone = GUILayout.Toggle(none, "", GUILayout.Width(25));
