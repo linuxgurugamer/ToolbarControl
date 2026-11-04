@@ -1,7 +1,8 @@
 ChangeLog
 
-0.1.9.15 (unreleased)
+0.1.9.15
 	Fixed typo in tooltip for the Blizzy toolbar setting
+	Fixed issue in window code to fix an exception on load with Unity 6.7 that leads to crashes.  This is for the upcoming KSP Redux release, which is using Unity 6.7.
 
 0.1.9.14
 	Thanks to github user @averageksp for this:
