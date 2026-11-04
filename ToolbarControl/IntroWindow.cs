@@ -46,9 +46,9 @@ namespace ToolbarControl_NS
 
         public void OnGUI()
         {
-            introWindowId = GUIUtility.GetControlID(FocusType.Passive);
             if (windowStyle == null)
             {
+                introWindowId = GUIUtility.GetControlID(FocusType.Passive);
                 GUI.color = Color.grey;
                 windowStyle = new GUIStyle(HighLogic.Skin.window);
                 windowStyle.active.background = windowStyle.normal.background;
