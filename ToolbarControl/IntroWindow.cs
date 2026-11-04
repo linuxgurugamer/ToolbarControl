@@ -24,7 +24,6 @@ namespace ToolbarControl_NS
 
         private void Awake()
         {
-            introWindowId = GUIUtility.GetControlID(FocusType.Passive);
             DontDestroyOnLoad(this);
         }
 
@@ -49,6 +48,7 @@ namespace ToolbarControl_NS
         {
             if (windowStyle == null)
             {
+                introWindowId = GUIUtility.GetControlID(FocusType.Passive);
                 GUI.color = Color.grey;
                 windowStyle = new GUIStyle(HighLogic.Skin.window);
                 windowStyle.active.background = windowStyle.normal.background;
